@@ -6,13 +6,10 @@ import Profile from './pages/Profile';
 import Header from './components/Header';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activePage: 'login',
-      isAuth: false,
-    };
-  }
+  state = {
+    activePage: 'login',
+    isAuth: false,
+  };
 
   login = () => {
     this.setState({ isAuth: true });
