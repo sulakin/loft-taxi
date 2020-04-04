@@ -12,25 +12,22 @@ class App extends React.Component {
       activePage: 'login',
       isAuth: false,
     };
-    this.handleRoute = this.handleRoute.bind(this);
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
   }
 
-  login() {
+  login = () => {
     this.setState({ isAuth: true });
     this.handleRoute('map');
-  }
+  };
 
-  logout() {
+  logout = () => {
     this.setState({ isAuth: false });
     this.handleRoute('login');
-  }
+  };
 
-  handleRoute(path) {
+  handleRoute = (path) => {
     this.setState({ activePage: path });
     window.history.pushState(null, null, path);
-  }
+  };
 
   renderRoute() {
     switch (this.state.activePage) {
