@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import Paper from '@material-ui/core/Paper';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-class Map extends React.Component {
+export class MapPage extends React.Component {
   map = React.createRef();
   mapbox = null;
 
@@ -64,5 +64,3 @@ class Map extends React.Component {
     );
   }
 }
-
-export default Map;

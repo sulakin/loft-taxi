@@ -5,14 +5,14 @@ import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     background: 'white',
     zIndex: 2,
   },
 }));
 
-export default function Header({ handleRoute, logout }) {
+export function Header({ handleRoute, logout }) {
   const classes = useStyles();
 
   return (

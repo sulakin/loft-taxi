@@ -12,7 +12,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
     width: '100vw',
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp({ login, handleRoute }) {
+export function SignUpPage({ login, handleRoute }) {
   const classes = useStyles();
   const [values, setValues] = React.useState({
     email: '',
@@ -46,7 +46,7 @@ export default function SignUp({ login, handleRoute }) {
     showPassword: false,
   });
 
-  const handleChange = prop => event => {
+  const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
@@ -54,7 +54,7 @@ export default function SignUp({ login, handleRoute }) {
     setValues({ ...values, showPassword: !values.showPassword });
   };
 
-  const handleMouseDownPassword = event => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
@@ -67,7 +67,7 @@ export default function SignUp({ login, handleRoute }) {
       <Grid item xs={3}>
         <Paper className={classes.paper}>
           <form
-            onKeyPress={event => {
+            onKeyPress={(event) => {
               if (event.key === 'Enter') login(event);
             }}
             noValidate

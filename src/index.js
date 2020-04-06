@@ -2,11 +2,15 @@ import React from 'react';
 import { render } from 'react-dom';
 import './index.scss';
 import App from './App';
+import { theme } from 'loft-taxi-mui-theme';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import * as serviceWorker from './serviceWorker';
 
 render(
   <React.StrictMode>
-    <App />
+    <MuiThemeProvider theme={theme}>
+      <App />
+    </MuiThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

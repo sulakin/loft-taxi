@@ -1,9 +1,9 @@
 import React from 'react';
-import Login from './pages/Login';
-import SignUp from './pages/SignUp';
-import Map from './pages/Map';
-import Profile from './pages/Profile';
-import Header from './components/Header';
+import { LoginPage } from './containers/LoginPage';
+import { SignUpPage } from './containers/SignUpPage';
+import { MapPage } from './containers/MapPage';
+import { ProfilePage } from './containers/ProfilePage';
+import { Header } from './components/Header';
 
 class App extends React.Component {
   state = {
@@ -29,13 +29,13 @@ class App extends React.Component {
   renderRoute() {
     switch (this.state.activePage) {
       case 'map':
-        return <Map handleRoute={this.handleRoute} />;
+        return <MapPage handleRoute={this.handleRoute} />;
       case 'profile':
-        return <Profile />;
+        return <ProfilePage />;
       case 'signup':
-        return <SignUp login={this.login} handleRoute={this.handleRoute} />;
+        return <SignUpPage login={this.login} handleRoute={this.handleRoute} />;
       default:
-        return <Login login={this.login} handleRoute={this.handleRoute} />;
+        return <LoginPage login={this.login} handleRoute={this.handleRoute} />;
     }
   }
 
