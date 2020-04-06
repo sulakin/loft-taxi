@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
+import { AuthContext } from '../../context/AuthContext';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
@@ -13,8 +14,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Header({ handleRoute, logout }) {
+export function Header({ handleRoute }) {
   const classes = useStyles();
+  const { logout } = useContext(AuthContext);
 
   return (
     <AppBar position="relative">
@@ -36,5 +38,4 @@ export function Header({ handleRoute, logout }) {
 
 Header.propTypes = {
   handleRoute: PropTypes.func,
-  logout: PropTypes.func,
 };

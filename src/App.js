@@ -1,23 +1,25 @@
 import React from 'react';
+import { AuthContext } from './context/AuthContext';
 import { LoginPage } from './containers/LoginPage';
 import { SignUpPage } from './containers/SignUpPage';
 import { MapPage } from './containers/MapPage';
 import { ProfilePage } from './containers/ProfilePage';
+import { Page404 } from './containers/Page404';
 import { Header } from './components/Header';
 
 class App extends React.Component {
   state = {
-    activePage: 'login',
-    isAuth: false,
+    activePage: window.location.pathname.slice(1),
+    isLoggedIn: false,
   };
 
   login = () => {
-    this.setState({ isAuth: true });
+    this.setState({ isLoggedIn: true });
     this.handleRoute('map');
   };
 
   logout = () => {
-    this.setState({ isAuth: false });
+    this.setState({ isLoggedIn: false });
     this.handleRoute('login');
   };
 
@@ -27,19 +29,27 @@ class App extends React.Component {
   };
 
   renderRoute() {
-    switch (this.state.activePage) {
+    const { isLoggedIn, activePage } = this.state;
+
+    if (!isLoggedIn && (activePage === 'map' || activePage === 'profile')) {
+      return <Page404 handleRoute={this.handleRoute} />;
+    }
+
+    switch (activePage) {
       case 'map':
         return <MapPage handleRoute={this.handleRoute} />;
       case 'profile':
         return <ProfilePage />;
       case 'signup':
-        return <SignUpPage login={this.login} handleRoute={this.handleRoute} />;
+        return <SignUpPage handleRoute={this.handleRoute} />;
       default:
-        return <LoginPage login={this.login} handleRoute={this.handleRoute} />;
+        return <LoginPage handleRoute={this.handleRoute} />;
     }
   }
 
   render() {
+    const { login, logout, handleRoute } = this;
+    const { isLoggedIn } = this.state;
     const styles = {
       root: {
         height: '100vh',
@@ -51,10 +61,12 @@ class App extends React.Component {
     };
 
     return (
-      <div style={styles.root}>
-        {this.state.isAuth && <Header handleRoute={this.handleRoute} logout={this.logout} />}
-        {this.renderRoute()}
-      </div>
+      <AuthContext.Provider value={{ login, logout, isLoggedIn }}>
+        <div style={styles.root}>
+          {this.state.isLoggedIn && <Header handleRoute={handleRoute} />}
+          {this.renderRoute()}
+        </div>
+      </AuthContext.Provider>
     );
   }
 }
