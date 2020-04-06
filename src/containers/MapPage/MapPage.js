@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import mapboxgl from 'mapbox-gl';
 import Paper from '@material-ui/core/Paper';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import PropTypes from 'prop-types';
 
-export class MapPage extends React.Component {
+export class MapPage extends Component {
+  static propTypes = {
+    handleRoute: PropTypes.func,
+  };
+
   map = React.createRef();
   mapbox = null;
 
@@ -24,6 +29,7 @@ export class MapPage extends React.Component {
   }
 
   render() {
+    const { handleRoute } = this.props;
     const styles = {
       root: {
         maxWidth: '30%',
@@ -55,7 +61,13 @@ export class MapPage extends React.Component {
         <Paper style={styles.root}>
           <h1 style={styles.h1}>Заполните платежные данные</h1>
           <p>Укажите информацию о банковской карте, чтобы сделать заказ.</p>
-          <Button style={styles.button} variant="contained" size="medium" color="primary">
+          <Button
+            onClick={() => handleRoute('profile')}
+            style={styles.button}
+            variant="contained"
+            size="medium"
+            color="primary"
+          >
             Перейти в профиль
           </Button>
         </Paper>

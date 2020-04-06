@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -158,3 +159,8 @@ export function SignUpPage({ login, handleRoute }) {
     </Grid>
   );
 }
+
+SignUpPage.propTypes = {
+  login: PropTypes.func,
+  handleRoute: PropTypes.func,
+};
