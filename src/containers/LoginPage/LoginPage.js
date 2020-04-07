@@ -8,6 +8,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,20 +20,8 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     width: '100vw',
   },
-  paper: {
-    padding: theme.spacing(6),
-  },
-  button: {
-    background: '#ffc617',
-    color: 'black',
-    '&:hover, &:focus, &:active': {
-      background: '#ffc617',
-      color: 'black',
-    },
-  },
-  h1: {
-    marginTop: '0px',
-  },
+  paper: { padding: theme.spacing(6) },
+  header: { marginBottom: 30 },
 }));
 
 export function LoginPage({ handleRoute }) {
@@ -73,13 +62,15 @@ export function LoginPage({ handleRoute }) {
           >
             <Grid container spacing={3}>
               <Grid item xs={12}>
-                <h1 className={classes.h1}>Войти</h1>
-                <p>
+                <Typography className={classes.header} component="h1" variant="h4" align="left">
+                  Войти
+                </Typography>
+                <Typography className={classes.subheader} component="p" align="left">
                   Новый пользователь?{' '}
                   <Link href="#" onClick={() => handleRoute('signup')}>
                     Зарегистрируйтесь
                   </Link>
-                </p>
+                </Typography>
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth>
@@ -115,13 +106,7 @@ export function LoginPage({ handleRoute }) {
                 </FormControl>
               </Grid>
               <Grid item xs={12} dir="rtl">
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  size="medium"
-                  color="primary"
-                  onClick={() => login()}
-                >
+                <Button variant="contained" size="medium" color="primary" onClick={() => login()}>
                   Войти
                 </Button>
               </Grid>

@@ -39,7 +39,7 @@ class App extends React.Component {
       case 'map':
         return <MapPage handleRoute={this.handleRoute} />;
       case 'profile':
-        return <ProfilePage />;
+        return <ProfilePage handleRoute={this.handleRoute} />;
       case 'signup':
         return <SignUpPage handleRoute={this.handleRoute} />;
       default:

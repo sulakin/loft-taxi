@@ -5,25 +5,29 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100vh',
-  },
-  paper: {
-    padding: theme.spacing(6),
-  },
+  root: { height: '100vh' },
+  paper: { padding: theme.spacing(6) },
+  header: { marginBottom: 30 },
 }));
 
 export const Page404 = () => {
   const classes = useStyles();
+
   return (
     <Grid container className={classes.root} direction="row" justify="center" alignItems="center">
       <Paper className={classes.paper}>
-        <Typography component="h1" variant="h2" align="center">
-          Error 404
-        </Typography>
-        <Typography align="center" className={classes.subtitle}>
-          Page Not Found
-        </Typography>
+        <Grid item xs={12}>
+          <Typography className={classes.header} component="h1" variant="h4" align="left">
+            Страница не найдена
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>
+            Похоже, вы перешли по неработающей ссылке или ввели URL, которого нет на этом сайте.
+            <br />
+            <a href={window.location.origin}>На главную</a>
+          </Typography>
+        </Grid>
       </Paper>
     </Grid>
   );
