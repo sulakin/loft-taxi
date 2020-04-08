@@ -1,4 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { RouteContext } from '../../context/RouteContext';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
@@ -11,9 +14,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { makeStyles } from '@material-ui/core/styles';
-import { AuthContext } from '../../context/AuthContext';
-import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,10 +24,11 @@ const useStyles = makeStyles((theme) => ({
   header: { marginBottom: 30 },
 }));
 
-export function LoginPage({ handleRoute }) {
-  const { login } = useContext(AuthContext);
+export const LoginPage = () => {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
+  const { login } = useContext(AuthContext);
+  const { route } = useContext(RouteContext);
+  const [values, setValues] = useState({
     username: '',
     password: '',
     showPassword: false,
@@ -67,11 +68,12 @@ export function LoginPage({ handleRoute }) {
                 </Typography>
                 <Typography className={classes.subheader} component="p" align="left">
                   Новый пользователь?{' '}
-                  <Link href="#" onClick={() => handleRoute('signup')}>
+                  <Link href="#" onClick={() => route('signup')}>
                     Зарегистрируйтесь
                   </Link>
                 </Typography>
               </Grid>
+
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="username">Имя пользователя</InputLabel>
@@ -83,6 +85,7 @@ export function LoginPage({ handleRoute }) {
                   />
                 </FormControl>
               </Grid>
+
               <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="password">Пароль</InputLabel>
@@ -105,6 +108,7 @@ export function LoginPage({ handleRoute }) {
                   />
                 </FormControl>
               </Grid>
+
               <Grid item xs={12} dir="rtl">
                 <Button variant="contained" size="medium" color="primary" onClick={() => login()}>
                   Войти
@@ -116,9 +120,4 @@ export function LoginPage({ handleRoute }) {
       </Grid>
     </Grid>
   );
-}
-
-LoginPage.propTypes = {
-  login: PropTypes.func,
-  handleRoute: PropTypes.func,
 };

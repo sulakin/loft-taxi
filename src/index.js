@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { render } from 'react-dom';
 import './index.scss';
 import App from './App';
@@ -9,13 +9,13 @@ import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 render(
-  <React.StrictMode>
+  <StrictMode>
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <MuiThemeProvider theme={theme}>
         <App />
       </MuiThemeProvider>
     </MuiPickersUtilsProvider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById('root')
 );
 

@@ -1,8 +1,8 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: { height: '100vh' },
@@ -21,6 +21,7 @@ export const Page404 = () => {
             Страница не найдена
           </Typography>
         </Grid>
+
         <Grid item xs={12}>
           <Typography>
             Похоже, вы перешли по неработающей ссылке или ввели URL, которого нет на этом сайте.

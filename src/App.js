@@ -1,74 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AuthContext } from './context/AuthContext';
+import { RouteContext } from './context/RouteContext';
+import { Header } from './components/Header';
 import { LoginPage } from './containers/LoginPage';
 import { SignUpPage } from './containers/SignUpPage';
 import { MapPage } from './containers/MapPage';
 import { ProfilePage } from './containers/ProfilePage';
 import { Page404 } from './containers/Page404';
-import { Header } from './components/Header';
+import { makeStyles } from '@material-ui/core/styles';
 
-class App extends React.Component {
-  state = {
-    activePage: window.location.pathname.slice(1),
-    isLoggedIn: false,
+const useStyles = makeStyles(() => ({
+  root: {
+    height: '100vh',
+    width: '100vw',
+    backgroundImage: 'url("/images/login__bg.jpg")',
+    backgroundPosition: 'top center',
+    backgroundRepeat: 'no-repeat',
+  },
+}));
+
+export default function App() {
+  const classes = useStyles();
+  const [activePage, setActivePage] = useState(window.location.pathname.slice(1));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const login = () => {
+    setIsLoggedIn(true);
+    handleRoute('map');
   };
 
-  login = () => {
-    this.setState({ isLoggedIn: true });
-    this.handleRoute('map');
+  const logout = () => {
+    setIsLoggedIn(false);
+    handleRoute('login');
   };
 
-  logout = () => {
-    this.setState({ isLoggedIn: false });
-    this.handleRoute('login');
-  };
-
-  handleRoute = (path) => {
-    this.setState({ activePage: path });
+  const handleRoute = (path) => {
+    setActivePage(path);
     window.history.pushState(null, null, path);
   };
 
-  renderRoute() {
-    const { isLoggedIn, activePage } = this.state;
-
+  const renderRoute = () => {
     if (!isLoggedIn && (activePage === 'map' || activePage === 'profile')) {
-      return <Page404 handleRoute={this.handleRoute} />;
+      return <Page404 handleRoute={handleRoute} />;
     }
 
     switch (activePage) {
       case 'map':
-        return <MapPage handleRoute={this.handleRoute} />;
+        return <MapPage handleRoute={handleRoute} />;
       case 'profile':
-        return <ProfilePage handleRoute={this.handleRoute} />;
+        return <ProfilePage handleRoute={handleRoute} />;
       case 'signup':
-        return <SignUpPage handleRoute={this.handleRoute} />;
+        return <SignUpPage handleRoute={handleRoute} />;
       default:
-        return <LoginPage handleRoute={this.handleRoute} />;
+        return <LoginPage handleRoute={handleRoute} />;
     }
-  }
+  };
 
-  render() {
-    const { login, logout, handleRoute } = this;
-    const { isLoggedIn } = this.state;
-    const styles = {
-      root: {
-        height: '100vh',
-        width: '100vw',
-        backgroundImage: 'url("/images/login__bg.jpg")',
-        backgroundPosition: 'top center',
-        backgroundRepeat: 'no-repeat',
-      },
-    };
-
-    return (
+  return (
+    <RouteContext.Provider value={{ route: handleRoute }}>
       <AuthContext.Provider value={{ login, logout, isLoggedIn }}>
-        <div style={styles.root}>
-          {this.state.isLoggedIn && <Header handleRoute={handleRoute} />}
-          {this.renderRoute()}
+        <div className={classes.root}>
+          {isLoggedIn && <Header handleRoute={handleRoute} />}
+          {renderRoute()}
         </div>
       </AuthContext.Provider>
-    );
-  }
+    </RouteContext.Provider>
+  );
 }
-
-export default App;
