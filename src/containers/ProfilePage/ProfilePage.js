@@ -54,6 +54,10 @@ export const ProfilePage = () => {
     setPaymentData({ ...paymentData, [prop]: event.target.value });
   };
 
+  const handleDateChange = (date) => {
+    setPaymentData({ ...paymentData, cardDate: date });
+  };
+
   const savePaymentData = (event) => {
     event.preventDefault();
     localStorage.setItem('PaymentData', JSON.stringify({ ...paymentData, hasPaymentData: true }));
@@ -82,6 +86,7 @@ export const ProfilePage = () => {
             <PaymentData
               paymentData={paymentData}
               handleChange={handleChange}
+              handleDateChange={handleDateChange}
               savePaymentData={savePaymentData}
             />
           )}

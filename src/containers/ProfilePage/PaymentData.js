@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Box from '@material-ui/core/Box';
-import { DatePicker } from '@material-ui/pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import { MCIcon } from 'loft-taxi-mui-theme';
 import PropTypes from 'prop-types';
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const PaymentData = ({ paymentData, handleChange, savePaymentData }) => {
+export const PaymentData = ({ paymentData, handleChange, handleDateChange, savePaymentData }) => {
   const classes = useStyles();
 
   return (
@@ -41,14 +41,15 @@ export const PaymentData = ({ paymentData, handleChange, savePaymentData }) => {
                 placeholder="0000 0000 0000 0000"
                 value={paymentData.cardNumber}
                 onChange={handleChange('cardNumber')}
+                autoFocus
               />
 
               <InputLabel htmlFor="cardNumber">Срок действия</InputLabel>
-              <DatePicker
-                views={['year', 'month']}
+              <KeyboardDatePicker
                 format="MM/yy"
+                views={['month', 'year']}
                 value={paymentData.cardDate}
-                onChange={handleChange('cardDate')}
+                onChange={handleDateChange}
               />
             </Box>
           </Card>
@@ -61,16 +62,24 @@ export const PaymentData = ({ paymentData, handleChange, savePaymentData }) => {
               <Input
                 id="cardName"
                 type="text"
+                placeholder="Иванов Иван"
                 value={paymentData.cardName}
                 onChange={handleChange('cardName')}
               />
 
               <InputLabel htmlFor="cardName">CVC</InputLabel>
-              <Input id="cvc" type="text" value={paymentData.cvc} onChange={handleChange('cvc')} />
+              <Input
+                id="cvc"
+                type="text"
+                placeholder="123"
+                alue={paymentData.cvc}
+                onChange={handleChange('cvc')}
+              />
             </Box>
           </Card>
         </Grid>
       </Grid>
+
       <Grid align="center">
         <Button
           type="submit"
@@ -96,5 +105,6 @@ PaymentData.propTypes = {
     hasPaymentData: PropTypes.bool,
   }),
   handleChange: PropTypes.func,
+  handleDateChange: PropTypes.func,
   savePaymentData: PropTypes.func,
 };

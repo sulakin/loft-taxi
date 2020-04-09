@@ -82,6 +82,7 @@ export const LoginPage = () => {
                     type="text"
                     value={values.username}
                     onChange={handleChange('username')}
+                    autoFocus
                   />
                 </FormControl>
               </Grid>

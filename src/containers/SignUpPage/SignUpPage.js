@@ -87,6 +87,7 @@ export const SignUpPage = () => {
                     type="text"
                     value={values.email}
                     onChange={handleChange('email')}
+                    autoFocus
                   />
                 </FormControl>
               </Grid>
