@@ -41,18 +41,18 @@ export default function App() {
 
   const renderRoute = () => {
     if (!isLoggedIn && (activePage === 'map' || activePage === 'profile')) {
-      return <Page404 handleRoute={handleRoute} />;
+      return <Page404 />;
     }
 
     switch (activePage) {
       case 'map':
-        return <MapPage handleRoute={handleRoute} />;
+        return <MapPage />;
       case 'profile':
-        return <ProfilePage handleRoute={handleRoute} />;
+        return <ProfilePage />;
       case 'signup':
-        return <SignUpPage handleRoute={handleRoute} />;
+        return <SignUpPage />;
       default:
-        return <LoginPage handleRoute={handleRoute} />;
+        return <LoginPage />;
     }
   };
 
@@ -60,7 +60,7 @@ export default function App() {
     <RouteContext.Provider value={{ route: handleRoute }}>
       <AuthContext.Provider value={{ login, logout, isLoggedIn }}>
         <div className={classes.root}>
-          {isLoggedIn && <Header handleRoute={handleRoute} />}
+          {isLoggedIn && <Header />}
           {renderRoute()}
         </div>
       </AuthContext.Provider>

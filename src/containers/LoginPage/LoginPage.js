@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   header: { marginBottom: 30 },
 }));
 
-export const LoginPage = () => {
+export function LoginPage() {
   const classes = useStyles();
   const { login } = useContext(AuthContext);
   const { route } = useContext(RouteContext);
@@ -82,7 +82,6 @@ export const LoginPage = () => {
                     type="text"
                     value={values.username}
                     onChange={handleChange('username')}
-                    autoFocus
                   />
                 </FormControl>
               </Grid>
@@ -121,4 +120,4 @@ export const LoginPage = () => {
       </Grid>
     </Grid>
   );
-};
+}
