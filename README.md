@@ -1,33 +1,29 @@
+# Неделя #2
 
-# Неделя #1
+## Домашнее задание, ТЗ №2:
 
-## Домашнее задание, ТЗ №1:
+1. Создан контекст авторизации, добавлен провайдер.
 
-1. Приложение создано при помощи [Create React App](https://github.com/facebook/create-react-app).
+2. Установлен пакет [loft-taxi-mui-theme](https://www.npmjs.com/package/loft-taxi-mui-theme). Приложение обернуто в провайдер темы.
 
-2. Добавлены компоненты, в черновом варианте сверстаны формы следующих страниц: логин, регистрация, карта, профиль *(скриншоты страниц приведены ниже)*.
+3. Сверстанны все страницы приложения с учетом состояний, компонентами [@material-ui](https://github.com/mui-org/material-ui). Добавлена страница 404.
 
-3. Для верстки были установлены npm пакеты [@material-ui](https://github.com/mui-org/material-ui) и [node-sass](https://github.com/sass/node-sass).
+4. Установлен [prop-types](https://www.npmjs.com/package/prop-types), указаны типы пропсов для компонентов.
 
-4. Навигация реализована при помощи стейта. При сабмите формы логина пользователь попадает на страницу с картой.
+5. Роутенг вынесен в провайдер.
 
-5. Установлен [mapbox](https://github.com/mapbox/mapbox-gl-js), карта выведена в соответствующей компоненте.
+6. Компоненты страниц разбиты на более мелкие, внутри них используется хуки для работы с провайдерами.
 
-6. Настроен [commitizen](https://github.com/commitizen/cz-cli).
+7. Установлены пакеты [enzyme](https://www.npmjs.com/package/enzyme) и [enzyme-adapter-react-16](https://www.npmjs.com/package/enzyme-adapter-react-16). Написанны первые тесты.
 
-## Cкриншоты:
+## Cкринкаст:
 
-*Страница “Логин”*<br />
-![Компонента страницы “Логин”](./screenshots/homework__01/login.png)
+![Cкринкаст](./docs/screenshots/homework__02/screencast.gif)
 
-*Страница “Регистрация”*<br />
-![Компонента страницы “Регистрация”](./screenshots/homework__01/signup.png)
+## Домашние задания:
 
-*Страница “Карта”*<br />
-![Компонента страницы “Карта”](./screenshots/homework__01/map.png)
-
-*Страница “Профиль”*<br />
-![Компонента страницы “Профиль”](./screenshots/homework__01/profile.png)
+1. [Неделя #1](./docs/Homework__01.md) _ТЗ №1_
+2. [Неделя #2](./README.md) _ТЗ №2_
 
 ## Доступные скрипты:
 
