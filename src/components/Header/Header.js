@@ -21,13 +21,14 @@ export const Header = () => {
   const classes = useStyles();
   const { logout } = useContext(AuthContext);
   const { route } = useContext(RouteContext);
+  const logoBlack = require('../../assets/images/logo__black.svg');
 
   return (
     <AppBar position="relative">
       <Toolbar className={classes.root}>
         <Grid container direction="row" justify="space-between" alignItems="center">
           <span onClick={() => route('map')} className={classes.logo}>
-            <img src="./images/logo__black.svg" width="160" alt="loft taxi" />
+            <img src={logoBlack} width="160" alt="loft taxi" />
           </span>
           <nav>
             <Button onClick={() => route('map')}>Карта</Button>

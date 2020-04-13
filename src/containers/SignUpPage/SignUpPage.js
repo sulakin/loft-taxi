@@ -15,11 +15,13 @@ import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
+const loginBg = require('../../assets/images/login__bg.jpg');
+
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
     width: '100vw',
-    backgroundImage: 'url("/images/login__bg.jpg")',
+    backgroundImage: `url("{${loginBg}")`,
     backgroundPosition: 'top center',
     backgroundRepeat: 'no-repeat',
   },
@@ -39,6 +41,8 @@ export const SignUpPage = () => {
     showPassword: false,
   });
 
+  const logoWhite = require('../../assets/images/logo__white.svg');
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -54,7 +58,7 @@ export const SignUpPage = () => {
   return (
     <Grid container justify="center" alignItems="center" className={classes.root}>
       <Grid item xs={3}>
-        <img src="./images/logo__white.svg" width="180" alt="loft taxi" />
+        <img src={logoWhite} width="180" alt="loft taxi" />
       </Grid>
 
       <Grid item xs={3}>

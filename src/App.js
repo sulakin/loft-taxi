@@ -9,11 +9,13 @@ import { ProfilePage } from './containers/ProfilePage';
 import { Page404 } from './containers/Page404';
 import { makeStyles } from '@material-ui/core/styles';
 
+const loginBg = require('./assets/images/login__bg.jpg');
+
 const useStyles = makeStyles(() => ({
   root: {
     height: '100vh',
     width: '100vw',
-    backgroundImage: 'url("/images/login__bg.jpg")',
+    backgroundImage: `url("${loginBg}")`,
     backgroundPosition: 'top center',
     backgroundRepeat: 'no-repeat',
   },

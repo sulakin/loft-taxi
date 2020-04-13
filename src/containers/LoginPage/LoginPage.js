@@ -34,6 +34,8 @@ export function LoginPage() {
     showPassword: false,
   });
 
+  const logoWhite = require('../../assets/images/logo__white.svg');
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -49,7 +51,7 @@ export function LoginPage() {
   return (
     <Grid container justify="center" alignItems="center" className={classes.root}>
       <Grid item xs={3}>
-        <img src="./images/logo__white.svg" width="180" alt="loft taxi" />
+        <img src={logoWhite} width="180" alt="loft taxi" />
       </Grid>
 
       <Grid item xs={3}>

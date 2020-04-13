@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react';
 import { render } from 'react-dom';
-import './index.scss';
+import './assets/styles/index.scss';
 import App from './App';
 import { theme } from 'loft-taxi-mui-theme';
 import { MuiThemeProvider } from '@material-ui/core/styles';
