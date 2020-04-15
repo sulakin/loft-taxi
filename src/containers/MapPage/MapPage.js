@@ -5,7 +5,7 @@ import { Order } from './Order';
 import { Info } from './Info';
 import Grid from '@material-ui/core/Grid';
 
-export const MapPage = () => {
+export default function MapPage() {
   const [values, setValues] = useState({
     startPoint: '',
     endPoint: '',
@@ -55,4 +55,4 @@ export const MapPage = () => {
       <MapContainer />
     </Grid>
   );
-};
+}

@@ -1,6 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import { RouteContext } from '../../context/RouteContext';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
@@ -29,10 +27,8 @@ const useStyles = makeStyles((theme) => ({
   header: { marginBottom: 30 },
 }));
 
-export const SignUpPage = () => {
+export default function SignUpPage() {
   const classes = useStyles();
-  const { login } = useContext(AuthContext);
-  const { route } = useContext(RouteContext);
   const [values, setValues] = useState({
     email: '',
     firstname: '',
@@ -65,7 +61,8 @@ export const SignUpPage = () => {
         <Paper className={classes.paper}>
           <form
             onKeyPress={(event) => {
-              if (event.key === 'Enter') login(event);
+              if (event.key === 'Enter') {
+              }
             }}
             noValidate
             autoComplete="off"
@@ -76,10 +73,7 @@ export const SignUpPage = () => {
                   Регистрация
                 </Typography>
                 <Typography className={classes.subheader} component="p" align="left">
-                  Уже зарегистрированы?{' '}
-                  <Link href="#" onClick={() => route('login')}>
-                    Войти
-                  </Link>
+                  Уже зарегистрированы? <Link to="/">Войти</Link>
                 </Typography>
               </Grid>
 
@@ -102,7 +96,7 @@ export const SignUpPage = () => {
                   <Input
                     id="firstname"
                     type="text"
-                    value={values.username}
+                    value={values.email}
                     onChange={handleChange('firstname')}
                   />
                 </FormControl>
@@ -114,7 +108,7 @@ export const SignUpPage = () => {
                   <Input
                     id="lastname"
                     type="text"
-                    value={values.username}
+                    value={values.email}
                     onChange={handleChange('lastname')}
                   />
                 </FormControl>
@@ -144,7 +138,7 @@ export const SignUpPage = () => {
               </Grid>
 
               <Grid item xs={12} dir="rtl">
-                <Button variant="contained" size="medium" color="primary" onClick={() => login()}>
+                <Button variant="contained" size="medium" color="primary">
                   Зарегистрироваться
                 </Button>
               </Grid>
@@ -154,4 +148,4 @@ export const SignUpPage = () => {
       </Grid>
     </Grid>
   );
-};
+}

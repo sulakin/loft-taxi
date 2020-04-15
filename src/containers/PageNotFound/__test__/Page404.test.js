@@ -1,10 +1,10 @@
 import React from 'react';
-import { Page404 } from '../Page404';
+import { PageNotFound } from '../PageNotFound';
 import { shallow } from 'enzyme';
 
-describe('Test Page404 ', () => {
+describe('Test PageNotFound ', () => {
   it('render component', () => {
-    const wrapper = shallow(<Page404 />);
+    const wrapper = shallow(<PageNotFound />);
     expect(wrapper).toBeTruthy();
   });
 });

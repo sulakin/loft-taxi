@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   header: { marginBottom: 30 },
 }));
 
-export const Page404 = () => {
+export default (PageNotFound) => {
   const classes = useStyles();
 
   return (

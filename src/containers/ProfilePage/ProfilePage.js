@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { RouteContext } from '../../context/RouteContext';
+import React, { useState, useEffect } from 'react';
 import { PaymentData } from './PaymentData';
 import { GoToOrder } from './GoToOrder';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,9 +18,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const ProfilePage = () => {
+export default function ProfilePage() {
   const classes = useStyles();
-  const { route } = useContext(RouteContext);
   const [paymentData, setPaymentData] = useState({
     cardNumber: '',
     cardDate: new Date(),
@@ -61,7 +59,6 @@ export const ProfilePage = () => {
   const savePaymentData = (event) => {
     event.preventDefault();
     localStorage.setItem('PaymentData', JSON.stringify({ ...paymentData, hasPaymentData: true }));
-    route('map');
   };
 
   return (
@@ -94,4 +91,4 @@ export const ProfilePage = () => {
       </Paper>
     </Grid>
   );
-};
+}

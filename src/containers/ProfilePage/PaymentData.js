@@ -45,12 +45,6 @@ export const PaymentData = ({ paymentData, handleChange, handleDateChange, saveP
               />
 
               <InputLabel htmlFor="cardNumber">Срок действия</InputLabel>
-              <KeyboardDatePicker
-                format="MM/yy"
-                views={['month', 'year']}
-                value={paymentData.cardDate}
-                onChange={handleDateChange}
-              />
             </Box>
           </Card>
         </Grid>

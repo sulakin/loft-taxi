@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { RouteContext } from '../../context/RouteContext';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -21,7 +21,6 @@ const useStyles = makeStyles(() => ({
 
 export const FillPaymentData = () => {
   const classes = useStyles();
-  const { route } = useContext(RouteContext);
 
   return (
     <Paper className={classes.root}>
@@ -38,8 +37,8 @@ export const FillPaymentData = () => {
       </Grid>
 
       <Grid item xs={12}>
-        <Button onClick={() => route('profile')} variant="contained" size="medium" color="primary">
-          Перейти в профиль
+        <Button variant="contained" size="medium" color="primary">
+          <Link to="/profile">Перейти в профиль</Link>
         </Button>
       </Grid>
     </Paper>
