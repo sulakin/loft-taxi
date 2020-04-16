@@ -3,8 +3,7 @@ import { shallow } from 'enzyme';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import App from '../../App';
-import Header from '../Header';
+import App from '../App';
 
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
   Map: () => ({}),
@@ -17,9 +16,7 @@ it('renders without crashing', () => {
   const store = mockStore({});
   shallow(
     <Provider store={store}>
-      <App>
-        <Header />
-      </App>
+      <App />
     </Provider>
   );
 });
