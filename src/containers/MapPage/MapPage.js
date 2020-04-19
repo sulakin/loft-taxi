@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { isProfileFilled } from '../../modules/Profile';
 import { MapContainer } from './MapContainer';
 import { FillPaymentData } from './FillPaymentData';
 import { Order } from './Order';
 import { Info } from './Info';
 import Grid from '@material-ui/core/Grid';
 
-export default function MapPage() {
+const MapPage = (props) => {
   const [values, setValues] = useState({
     startPoint: '',
     endPoint: '',
-    hasPaymentData: false,
     isOrderCreated: false,
   });
 
@@ -45,7 +46,7 @@ export default function MapPage() {
 
   return (
     <Grid container>
-      {!values.hasPaymentData ? (
+      {!props.isProfileData ? (
         <FillPaymentData />
       ) : !values.isOrderCreated ? (
         <Order createOrder={createOrder} />
@@ -55,4 +56,10 @@ export default function MapPage() {
       <MapContainer />
     </Grid>
   );
-}
+};
+
+const mapStateToProps = (state) => ({
+  isProfileData: isProfileFilled(state),
+});
+
+export default connect(mapStateToProps)(MapPage);
