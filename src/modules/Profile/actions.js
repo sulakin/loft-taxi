@@ -1,3 +1,3 @@
 import { createAction } from 'redux-actions';
 
-export {};
+export const profileSubmit = createAction('PROFILE/SUBMIT');

@@ -1,3 +1,10 @@
-export const isLoggedIn = (state) => state.auth.isLoggedIn;
-export const isLoading = (state) => state.auth.isLoading;
-export const error = (state) => state.auth.error;
+export const getProfileData = (state) => state.profile;
+export const isProfileFilled = (state) => {
+  const { number, date, name, cvc } = state.profile;
+
+  if (number && date && name && cvc) {
+    return true;
+  }
+
+  return false;
+};

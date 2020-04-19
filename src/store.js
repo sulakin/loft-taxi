@@ -7,7 +7,6 @@ import { getLocalState, setLocalState } from './helpers/localState';
 const localState = getLocalState();
 
 const createAppStore = () => {
-  console.log(localState);
   const store = createStore(
     rootReducer,
     localState,

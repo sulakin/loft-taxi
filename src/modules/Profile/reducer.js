@@ -1,5 +1,9 @@
 import { handleActions } from 'redux-actions';
-import { combineReducers } from 'redux';
-import {} from './actions';
+import { profileSubmit } from './actions';
 
-export default combineReducers({});
+export default handleActions(
+  {
+    [profileSubmit]: (_state, action) => action.payload,
+  },
+  { number: '', date: '', name: '', cvc: '' }
+);
