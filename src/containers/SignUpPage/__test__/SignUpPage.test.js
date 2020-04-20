@@ -1,5 +1,5 @@
 import React from 'react';
-import { SignUpPage } from '../SignUpPage';
+import SignUpPage from '../SignUpPage';
 import { shallow } from 'enzyme';
 
 describe('Test SignUpPage ', () => {

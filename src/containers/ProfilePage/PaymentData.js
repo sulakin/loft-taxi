@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { getProfileData, profileSubmit } from '../../modules/Profile';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -6,7 +8,6 @@ import Card from '@material-ui/core/Card';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Box from '@material-ui/core/Box';
-import { KeyboardDatePicker } from '@material-ui/pickers';
 import { MCIcon } from 'loft-taxi-mui-theme';
 import PropTypes from 'prop-types';
 
@@ -23,88 +24,120 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const PaymentData = ({ paymentData, handleChange, handleDateChange, savePaymentData }) => {
+const PaymentData = (props) => {
   const classes = useStyles();
+  const { number, date, name, cvc } = props.profileData;
+  const [values, setValues] = useState({
+    number,
+    date,
+    name,
+    cvc,
+  });
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    props.profileSubmit({ ...values });
+  };
 
   return (
-    <Grid item xs={12}>
-      <Grid container justify="center" spacing={4}>
-        <Grid item xs={6}>
-          <Card elevation={3} className={classes.card}>
-            <Box display="flex" height="100%" flexDirection="column" justifyContent="space-around">
-              <MCIcon />
+    <form onSubmit={handleSubmit}>
+      <Grid item xs={12}>
+        <Grid container justify="center" spacing={4}>
+          <Grid item xs={6}>
+            <Card elevation={3} className={classes.card}>
+              <Box
+                display="flex"
+                height="100%"
+                flexDirection="column"
+                justifyContent="space-around"
+              >
+                <MCIcon />
 
-              <InputLabel htmlFor="cardNumber">Номер карты</InputLabel>
-              <Input
-                id="cardNumber"
-                type="text"
-                placeholder="0000 0000 0000 0000"
-                value={paymentData.cardNumber}
-                onChange={handleChange('cardNumber')}
-                autoFocus
-              />
+                <InputLabel htmlFor="number">Номер карты</InputLabel>
+                <Input
+                  id="number"
+                  type="text"
+                  placeholder="0000 0000 0000 0000"
+                  value={values.number}
+                  onChange={handleChange('number')}
+                  autoFocus
+                />
 
-              <InputLabel htmlFor="cardNumber">Срок действия</InputLabel>
-              <KeyboardDatePicker
-                format="MM/yy"
-                views={['month', 'year']}
-                value={paymentData.cardDate}
-                onChange={handleDateChange}
-              />
-            </Box>
-          </Card>
+                <InputLabel htmlFor="date">Срок действия</InputLabel>
+                <Input
+                  id="date"
+                  type="text"
+                  placeholder="12/20"
+                  value={values.date}
+                  onChange={handleChange('date')}
+                  autoFocus
+                />
+              </Box>
+            </Card>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Card elevation={3} className={classes.card}>
+              <Box
+                display="flex"
+                height="100%"
+                flexDirection="column"
+                justifyContent="space-around"
+              >
+                <InputLabel htmlFor="name">Имя владельца</InputLabel>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Иванов Иван"
+                  value={values.name}
+                  onChange={handleChange('name')}
+                />
+
+                <InputLabel htmlFor="cvc">CVC</InputLabel>
+                <Input
+                  id="cvc"
+                  type="text"
+                  placeholder="123"
+                  value={values.cvc}
+                  onChange={handleChange('cvc')}
+                />
+              </Box>
+            </Card>
+          </Grid>
         </Grid>
 
-        <Grid item xs={6}>
-          <Card elevation={3} className={classes.card}>
-            <Box display="flex" height="100%" flexDirection="column" justifyContent="space-around">
-              <InputLabel htmlFor="cardName">Имя владельца</InputLabel>
-              <Input
-                id="cardName"
-                type="text"
-                placeholder="Иванов Иван"
-                value={paymentData.cardName}
-                onChange={handleChange('cardName')}
-              />
-
-              <InputLabel htmlFor="cardName">CVC</InputLabel>
-              <Input
-                id="cvc"
-                type="text"
-                placeholder="123"
-                alue={paymentData.cvc}
-                onChange={handleChange('cvc')}
-              />
-            </Box>
-          </Card>
+        <Grid align="center">
+          <Button
+            type="submit"
+            className={classes.button}
+            variant="contained"
+            size="medium"
+            color="primary"
+          >
+            Сохранить
+          </Button>
         </Grid>
       </Grid>
-
-      <Grid align="center">
-        <Button
-          type="submit"
-          className={classes.button}
-          variant="contained"
-          size="medium"
-          color="primary"
-          onClick={(event) => savePaymentData(event)}
-        >
-          Сохранить
-        </Button>
-      </Grid>
-    </Grid>
+    </form>
   );
 };
 
 PaymentData.propTypes = {
-  paymentData: PropTypes.exact({
-    cardNumber: PropTypes.string,
-    cardDate: PropTypes.instanceOf(Date),
-    cardName: PropTypes.string,
+  profileData: PropTypes.exact({
+    number: PropTypes.string,
+    date: PropTypes.string,
+    name: PropTypes.string,
     cvc: PropTypes.string,
-    hasPaymentData: PropTypes.bool,
   }),
-  handleChange: PropTypes.func,
-  handleDateChange: PropTypes.func,
-  savePaymentData: PropTypes.func,
 };
+
+const mapStateToProps = (state) => ({
+  profileData: getProfileData(state),
+});
+const mapDispatchToProps = { profileSubmit };
+
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentData);

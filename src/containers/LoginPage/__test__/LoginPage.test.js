@@ -1,35 +1,25 @@
 import React from 'react';
-import { LoginPage } from '../LoginPage';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
+import { Provider } from 'react-redux';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import App from '../../../components/App';
+import LoginPage from '../LoginPage';
 
-describe('Test LoginPage ', () => {
-  let wrapper = null;
+jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
+  Map: () => ({}),
+}));
 
-  beforeAll(() => {
-    wrapper = mount(<LoginPage />);
-  });
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
-  afterAll(() => {
-    wrapper.unmount();
-  });
-
-  it('render LoginPage', () => {
-    expect(wrapper).toBeTruthy();
-  });
-
-  it('render header', () => {
-    expect(wrapper.findWhere((el) => el.type() === 'h1' && el.contains('Войти'))).toHaveLength(1);
-  });
-
-  it('render signup link', () => {
-    expect(
-      wrapper.findWhere((el) => el.type() === 'a' && el.contains('Зарегистрируйтесь'))
-    ).toHaveLength(1);
-  });
-
-  it('render login button', () => {
-    expect(wrapper.findWhere((el) => el.type() === 'button' && el.contains('Войти'))).toHaveLength(
-      1
-    );
-  });
+it('renders without crashing', () => {
+  const store = mockStore({});
+  shallow(
+    <Provider store={store}>
+      <App>
+        <LoginPage />
+      </App>
+    </Provider>
+  );
 });

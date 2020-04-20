@@ -1,6 +1,7 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import { RouteContext } from '../../context/RouteContext';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { fetchAuthRequest, isLoggedIn, isLoading, authError, getErrors } from '../../modules/Auth';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,7 +10,6 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
@@ -22,33 +22,48 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: { padding: theme.spacing(6) },
   header: { marginBottom: 30 },
+  alert: {
+    color: 'white',
+    fontWeight: 500,
+    padding: theme.spacing(1),
+    borderRadius: '4px',
+    boxSizing: 'border-box',
+    backgroundColor: '#f44336',
+    display: 'inline-block',
+    width: '100%',
+    textAlign: 'center',
+  },
 }));
 
-export function LoginPage() {
+const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors }) => {
   const classes = useStyles();
-  const { login } = useContext(AuthContext);
-  const { route } = useContext(RouteContext);
-  const [values, setValues] = useState({
-    username: '',
-    password: '',
-    showPassword: false,
-  });
-
   const logoWhite = require('../../assets/images/logo__white.svg');
+  const [showPassword, setShowPassword] = useState(false);
+  const [values, setValues] = useState({
+    email: '',
+    password: '',
+  });
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
+    setShowPassword(!showPassword);
   };
 
-  const handleMouseDownPassword = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
+    if (!!values.password && !!values.email) {
+      fetchAuthRequest(values);
+    } else {
+      authError('Введите логин и пароль');
+    }
   };
 
-  return (
+  return isLoggedIn ? (
+    <Redirect to="/map" />
+  ) : (
     <Grid container justify="center" alignItems="center" className={classes.root}>
       <Grid item xs={3}>
         <img src={logoWhite} width="180" alt="loft taxi" />
@@ -57,8 +72,11 @@ export function LoginPage() {
       <Grid item xs={3}>
         <Paper className={classes.paper}>
           <form
+            onSubmit={(event) => handleSubmit(event)}
             onKeyPress={(event) => {
-              if (event.key === 'Enter') login(event);
+              if (event.key === 'Enter') {
+                handleSubmit(event);
+              }
             }}
             noValidate
             autoComplete="off"
@@ -69,21 +87,18 @@ export function LoginPage() {
                   Войти
                 </Typography>
                 <Typography className={classes.subheader} component="p" align="left">
-                  Новый пользователь?{' '}
-                  <Link href="#" onClick={() => route('signup')}>
-                    Зарегистрируйтесь
-                  </Link>
+                  Новый пользователь? <Link to="/signup">Зарегистрируйтесь</Link>
                 </Typography>
               </Grid>
 
               <Grid item xs={12}>
                 <FormControl fullWidth>
-                  <InputLabel htmlFor="username">Имя пользователя</InputLabel>
+                  <InputLabel htmlFor="email">Имя пользователя</InputLabel>
                   <Input
-                    id="username"
+                    id="email"
                     type="text"
-                    value={values.username}
-                    onChange={handleChange('username')}
+                    value={values.email}
+                    onChange={handleChange('email')}
                   />
                 </FormControl>
               </Grid>
@@ -93,7 +108,7 @@ export function LoginPage() {
                   <InputLabel htmlFor="password">Пароль</InputLabel>
                   <Input
                     id="password"
-                    type={values.showPassword ? 'text' : 'password'}
+                    type={showPassword ? 'text' : 'password'}
                     value={values.password}
                     onChange={handleChange('password')}
                     endAdornment={
@@ -101,9 +116,8 @@ export function LoginPage() {
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
                         >
-                          {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -111,8 +125,20 @@ export function LoginPage() {
                 </FormControl>
               </Grid>
 
+              {errors && (
+                <Grid item xs={12} dir="rtl">
+                  <span className={classes.alert}>{errors}</span>
+                </Grid>
+              )}
+
               <Grid item xs={12} dir="rtl">
-                <Button variant="contained" size="medium" color="primary" onClick={() => login()}>
+                <Button
+                  disabled={isLoading}
+                  type="submit"
+                  variant="contained"
+                  size="medium"
+                  color="primary"
+                >
                   Войти
                 </Button>
               </Grid>
@@ -122,4 +148,13 @@ export function LoginPage() {
       </Grid>
     </Grid>
   );
-}
+};
+
+const mapStateToProps = (state) => ({
+  isLoggedIn: isLoggedIn(state),
+  isLoading: isLoading(state),
+  errors: getErrors(state),
+});
+const mapDispatchToProps = { fetchAuthRequest, authError };
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

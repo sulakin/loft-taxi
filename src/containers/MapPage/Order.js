@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
   input: { marginBottom: 30 },
 }));
 
-export const Order = ({ createOrder }) => {
+export function Order({ createOrder }) {
   const classes = useStyles();
 
   return (
@@ -41,7 +41,7 @@ export const Order = ({ createOrder }) => {
       </Grid>
     </Paper>
   );
-};
+}
 
 Order.propTypes = {
   createOrder: PropTypes.func,
