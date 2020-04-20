@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
-import { fetchAuthRequest, fetchAuthSuccess, fetchAuthFailure, logout } from './actions';
+import { fetchAuthRequest, fetchAuthSuccess, fetchAuthFailure, authError, logout } from './actions';
 
 const isLoggedIn = handleActions(
   {
@@ -37,6 +37,7 @@ const errors = handleActions(
     [fetchAuthRequest]: () => null,
     [fetchAuthSuccess]: () => null,
     [fetchAuthFailure]: (_state, action) => action.payload.error,
+    [authError]: (_state, action) => action.payload,
     [logout]: () => null,
   },
   null

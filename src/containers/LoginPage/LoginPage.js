@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchAuthRequest, isLoggedIn, isLoading, getErrors } from '../../modules/Auth';
+import { fetchAuthRequest, isLoggedIn, isLoading, authError, getErrors } from '../../modules/Auth';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, errors }) => {
+const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors }) => {
   const classes = useStyles();
   const logoWhite = require('../../assets/images/logo__white.svg');
   const [showPassword, setShowPassword] = useState(false);
@@ -54,7 +54,11 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, errors }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetchAuthRequest(values);
+    if (!!values.password && !!values.email) {
+      fetchAuthRequest(values);
+    } else {
+      authError('Введите логин и пароль');
+    }
   };
 
   return isLoggedIn ? (
@@ -151,6 +155,6 @@ const mapStateToProps = (state) => ({
   isLoading: isLoading(state),
   errors: getErrors(state),
 });
-const mapDispatchToProps = { fetchAuthRequest };
+const mapDispatchToProps = { fetchAuthRequest, authError };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
