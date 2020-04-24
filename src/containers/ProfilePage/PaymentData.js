@@ -9,7 +9,6 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Box from '@material-ui/core/Box';
 import { MCIcon } from 'loft-taxi-mui-theme';
-import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   button: { marginTop: '24px' },
@@ -124,15 +123,6 @@ const PaymentData = (props) => {
       </Grid>
     </form>
   );
-};
-
-PaymentData.propTypes = {
-  profileData: PropTypes.exact({
-    cardNumber: PropTypes.string,
-    expiryDate: PropTypes.string,
-    cardName: PropTypes.string,
-    cvc: PropTypes.string,
-  }),
 };
 
 const mapStateToProps = (state) => ({

@@ -26,15 +26,16 @@ const getProfile = (payload) => {
     .catch((error) => error);
 };
 
-const getRoute = (token) => {
-  return fetch(`${serverURL}/route`)
+const getRoute = (address1, address2) => {
+  return fetch(`${serverURL}/route?address1=${address1}&address2=${address2}`)
     .then((response) => response.json())
     .catch((error) => error);
 };
 
-const getAddressList = (token) => {
+const getAddressList = () => {
   return fetch(`${serverURL}/addressList`)
     .then((response) => response.json())
+    .then((response) => response.addresses.map((item) => ({ value: item })))
     .catch((error) => error);
 };
 
