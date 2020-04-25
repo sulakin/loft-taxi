@@ -10,6 +10,16 @@ const auth = (payload) => {
     .catch((error) => error);
 };
 
+const register = (payload) => {
+  return fetch(`${serverURL}/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+    .then((response) => response.json())
+    .catch((error) => error);
+};
+
 const setProfile = (payload) => {
   return fetch(`${serverURL}/card`, {
     method: 'POST',
@@ -39,4 +49,4 @@ const getAddressList = () => {
     .catch((error) => error);
 };
 
-export { auth, setProfile, getProfile, getRoute, getAddressList };
+export { auth, register, setProfile, getProfile, getRoute, getAddressList };
