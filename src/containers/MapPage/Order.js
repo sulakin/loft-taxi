@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { getAddresses, fetchAddressRequest } from '../../modules/Address';
 import { fetchOrderRequest, getCords, getIsOrder, removeOrder } from '../../modules/Order';
 import { Info } from './Info';
-import MapContainer from './MapContainer';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
@@ -108,7 +107,6 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isOrder }) {
           </form>
         )}
       </Paper>
-      <MapContainer />
     </>
   );
 }
