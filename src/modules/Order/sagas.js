@@ -11,8 +11,8 @@ export function* orderFlow(action) {
   const payload = yield call(getRoute, start, end);
 
   if (payload) {
-    yield setIsOrder(true);
     yield put(fetchOrderSuccess(payload));
+    yield setIsOrder(true);
   } else {
     yield put(fetchOrderFailure());
   }
