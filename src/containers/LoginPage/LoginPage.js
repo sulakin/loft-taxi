@@ -7,13 +7,12 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { Form, Field } from 'react-final-form';
+import { TextField } from 'final-form-material-ui';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,21 +38,12 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
   const classes = useStyles();
   const logoWhite = require('../../assets/images/logo__white.svg');
   const [showPassword, setShowPassword] = useState(false);
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
-  });
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (values) => {
     if (!!values.password && !!values.email) {
       fetchAuthRequest(values);
     } else {
@@ -71,79 +61,78 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
 
       <Grid item xs={3}>
         <Paper className={classes.paper}>
-          <form
+          <Form
             onSubmit={(event) => handleSubmit(event)}
             onKeyPress={(event) => {
               if (event.key === 'Enter') {
                 handleSubmit(event);
               }
             }}
-            noValidate
-            autoComplete="off"
-          >
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography className={classes.header} component="h1" variant="h4" align="left">
-                  Войти
-                </Typography>
-                <Typography className={classes.subheader} component="p" align="left">
-                  Новый пользователь? <Link to="/signup">Зарегистрируйтесь</Link>
-                </Typography>
-              </Grid>
+            render={({ handleSubmit }) => (
+              <form onSubmit={(event) => handleSubmit(event)}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography className={classes.header} component="h1" variant="h4" align="left">
+                      Войти
+                    </Typography>
+                    <Typography className={classes.subheader} component="p" align="left">
+                      Новый пользователь? <Link to="/signup">Зарегистрируйтесь</Link>
+                    </Typography>
+                  </Grid>
 
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="email">Имя пользователя</InputLabel>
-                  <Input
-                    id="email"
-                    type="text"
-                    value={values.email}
-                    onChange={handleChange('email')}
-                  />
-                </FormControl>
-              </Grid>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <Field
+                        component={TextField}
+                        name="email"
+                        label="Имя пользователя"
+                        fullWidth={true}
+                        required
+                      />
+                    </FormControl>
+                  </Grid>
 
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="password">Пароль</InputLabel>
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    onChange={handleChange('password')}
-                    endAdornment={
-                      <InputAdornment position="end">
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <Field
+                        component={TextField}
+                        name="password"
+                        label="Пароль"
+                        type={showPassword ? 'text' : 'password'}
+                        fullWidth={true}
+                        required
+                      >
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
                         >
                           {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </Grid>
+                      </Field>
+                    </FormControl>
+                  </Grid>
 
-              {errors && (
-                <Grid item xs={12} dir="rtl">
-                  <span className={classes.alert}>{errors}</span>
+                  {errors && (
+                    <Grid item xs={12} dir="rtl">
+                      <span className={classes.alert}>{errors}</span>
+                    </Grid>
+                  )}
+
+                  <Grid item xs={12} dir="rtl">
+                    <Button
+                      disabled={isLoading}
+                      type="submit"
+                      variant="contained"
+                      size="medium"
+                      color="primary"
+                    >
+                      Войти
+                    </Button>
+                  </Grid>
                 </Grid>
-              )}
-
-              <Grid item xs={12} dir="rtl">
-                <Button
-                  disabled={isLoading}
-                  type="submit"
-                  variant="contained"
-                  size="medium"
-                  color="primary"
-                >
-                  Войти
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+              </form>
+            )}
+          ></Form>
         </Paper>
       </Grid>
     </Grid>
