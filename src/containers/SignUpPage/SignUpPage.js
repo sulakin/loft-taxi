@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {
+  fetchRegisterRequest,
+  registerError,
+  isLoggedIn,
+  isLoading,
+  getErrors,
+} from '../../modules/Register';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -25,14 +33,25 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: { padding: theme.spacing(6) },
   header: { marginBottom: 30 },
+  alert: {
+    color: 'white',
+    fontWeight: 500,
+    padding: theme.spacing(1),
+    borderRadius: '4px',
+    boxSizing: 'border-box',
+    backgroundColor: '#f44336',
+    display: 'inline-block',
+    width: '100%',
+    textAlign: 'center',
+  },
 }));
 
-export default function SignUpPage() {
+const SignUpPage = ({ fetchRegisterRequest, isLoading, isLoggedIn, registerError, errors }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
     email: '',
-    firstname: '',
-    lastname: '',
+    name: '',
+    surname: '',
     password: '',
     showPassword: false,
   });
@@ -51,7 +70,19 @@ export default function SignUpPage() {
     event.preventDefault();
   };
 
-  return (
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!!values.password && !!values.email && !!values.name && !!values.surname) {
+      fetchRegisterRequest(values);
+    } else {
+      registerError('Все поля формы должны быть заполнены');
+    }
+  };
+
+  return isLoggedIn ? (
+    <Redirect to="/map" />
+  ) : (
     <Grid container justify="center" alignItems="center" className={classes.root}>
       <Grid item xs={3}>
         <img src={logoWhite} width="180" alt="loft taxi" />
@@ -60,8 +91,10 @@ export default function SignUpPage() {
       <Grid item xs={3}>
         <Paper className={classes.paper}>
           <form
+            onSubmit={(event) => handleSubmit(event)}
             onKeyPress={(event) => {
               if (event.key === 'Enter') {
+                handleSubmit(event);
               }
             }}
             noValidate
@@ -92,24 +125,24 @@ export default function SignUpPage() {
 
               <Grid item xs={6}>
                 <FormControl fullWidth>
-                  <InputLabel htmlFor="firstname">Имя</InputLabel>
+                  <InputLabel htmlFor="name">Имя</InputLabel>
                   <Input
-                    id="firstname"
+                    id="name"
                     type="text"
-                    value={values.email}
-                    onChange={handleChange('firstname')}
+                    value={values.name}
+                    onChange={handleChange('name')}
                   />
                 </FormControl>
               </Grid>
 
               <Grid item xs={6}>
                 <FormControl fullWidth>
-                  <InputLabel htmlFor="lastname">Фамилия</InputLabel>
+                  <InputLabel htmlFor="surname">Фамилия</InputLabel>
                   <Input
-                    id="lastname"
+                    id="surname"
                     type="text"
-                    value={values.email}
-                    onChange={handleChange('lastname')}
+                    value={values.surname}
+                    onChange={handleChange('surname')}
                   />
                 </FormControl>
               </Grid>
@@ -137,8 +170,20 @@ export default function SignUpPage() {
                 </FormControl>
               </Grid>
 
+              {errors && (
+                <Grid item xs={12} dir="rtl">
+                  <span className={classes.alert}>{errors}</span>
+                </Grid>
+              )}
+
               <Grid item xs={12} dir="rtl">
-                <Button variant="contained" size="medium" color="primary">
+                <Button
+                  disabled={isLoading}
+                  type="submit"
+                  variant="contained"
+                  size="medium"
+                  color="primary"
+                >
                   Зарегистрироваться
                 </Button>
               </Grid>
@@ -148,4 +193,13 @@ export default function SignUpPage() {
       </Grid>
     </Grid>
   );
-}
+};
+
+const mapStateToProps = (state) => ({
+  isLoggedIn: isLoggedIn(state),
+  isLoading: isLoading(state),
+  errors: getErrors(state),
+});
+const mapDispatchToProps = { fetchRegisterRequest, registerError };
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpPage);

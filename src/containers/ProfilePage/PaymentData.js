@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { getProfileData, profileSubmit } from '../../modules/Profile';
+import { fetchProfileGet, fetchProfileRequest } from '../../modules/Profile';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +9,6 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Box from '@material-ui/core/Box';
 import { MCIcon } from 'loft-taxi-mui-theme';
-import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   button: { marginTop: '24px' },
@@ -26,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
 
 const PaymentData = (props) => {
   const classes = useStyles();
-  const { number, date, name, cvc } = props.profileData;
+  const { cardNumber, expiryDate, cardName, cvc } = props.profileData;
   const [values, setValues] = useState({
-    number,
-    date,
-    name,
+    cardNumber,
+    expiryDate,
+    cardName,
     cvc,
   });
 
@@ -40,7 +39,7 @@ const PaymentData = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.profileSubmit({ ...values });
+    props.fetchProfileRequest({ ...values });
   };
 
   return (
@@ -62,8 +61,8 @@ const PaymentData = (props) => {
                   id="number"
                   type="text"
                   placeholder="0000 0000 0000 0000"
-                  value={values.number}
-                  onChange={handleChange('number')}
+                  value={values.cardNumber}
+                  onChange={handleChange('cardNumber')}
                   autoFocus
                 />
 
@@ -72,8 +71,8 @@ const PaymentData = (props) => {
                   id="date"
                   type="text"
                   placeholder="12/20"
-                  value={values.date}
-                  onChange={handleChange('date')}
+                  value={values.expiryDate}
+                  onChange={handleChange('expiryDate')}
                   autoFocus
                 />
               </Box>
@@ -93,8 +92,8 @@ const PaymentData = (props) => {
                   id="name"
                   type="text"
                   placeholder="Иванов Иван"
-                  value={values.name}
-                  onChange={handleChange('name')}
+                  value={values.cardName}
+                  onChange={handleChange('cardName')}
                 />
 
                 <InputLabel htmlFor="cvc">CVC</InputLabel>
@@ -126,18 +125,9 @@ const PaymentData = (props) => {
   );
 };
 
-PaymentData.propTypes = {
-  profileData: PropTypes.exact({
-    number: PropTypes.string,
-    date: PropTypes.string,
-    name: PropTypes.string,
-    cvc: PropTypes.string,
-  }),
-};
-
 const mapStateToProps = (state) => ({
-  profileData: getProfileData(state),
+  profileData: fetchProfileGet(state),
 });
-const mapDispatchToProps = { profileSubmit };
+const mapDispatchToProps = { fetchProfileRequest };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PaymentData);

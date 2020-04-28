@@ -1,4 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { getCords } from '../../modules/Order';
+import { drawRoute } from '../../helpers/drawRoute';
 import { makeStyles } from '@material-ui/core/styles';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -14,12 +17,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const MapContainer = () => {
+const MapContainer = ({ cords }) => {
   const classes = useStyles();
-
   const mapContainer = useCallback((node) => {
     if (node !== null) {
-      new mapboxgl.Map({
+      document.map = new mapboxgl.Map({
         accessToken:
           'pk.eyJ1Ijoic3VsYWtpbiIsImEiOiJjazhldTVuZWQwMGczM250OHkzbHJxd3Z5In0.FrkwPTWbE4mYb6DA0Hu0Pg',
         container: node,
@@ -30,5 +32,17 @@ export const MapContainer = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!!cords.length && !!document.map) {
+      setTimeout(() => {
+        drawRoute(cords);
+      });
+    }
+  }, [cords]);
+
   return <div id="map" className={classes.root} ref={mapContainer}></div>;
 };
+
+const mapStateToProps = (state) => ({ cords: getCords(state) });
+
+export default connect(mapStateToProps)(MapContainer);

@@ -1,4 +1,4 @@
-import React, { StrictMode } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './components/App';
@@ -13,15 +13,13 @@ import * as serviceWorker from './serviceWorker';
 const store = createStore();
 
 render(
-  <StrictMode>
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </MuiThemeProvider>
-    </MuiPickersUtilsProvider>
-  </StrictMode>,
+  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <MuiThemeProvider theme={theme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </MuiThemeProvider>
+  </MuiPickersUtilsProvider>,
   document.getElementById('root')
 );
 

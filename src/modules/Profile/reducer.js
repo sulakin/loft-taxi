@@ -1,9 +1,10 @@
 import { handleActions } from 'redux-actions';
-import { profileSubmit } from './actions';
+import { fetchProfileRequest, fetchProfileGet } from './actions';
 
 export default handleActions(
   {
-    [profileSubmit]: (_state, action) => action.payload,
+    [fetchProfileRequest]: (_state, action) => action.payload,
+    [fetchProfileGet]: (_state, action) => action.payload,
   },
-  { number: '', date: '', name: '', cvc: '' }
+  { cardNumber: '', expiryDate: '', cardName: '', cvc: '' }
 );
