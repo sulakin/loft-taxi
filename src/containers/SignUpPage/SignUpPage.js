@@ -10,7 +10,6 @@ import {
 } from '../../modules/Register';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
@@ -73,12 +72,7 @@ const SignUpPage = ({ fetchRegisterRequest, isLoading, isLoggedIn, registerError
       <Grid item xs={3}>
         <Paper className={classes.paper}>
           <Form
-            onSubmit={(event) => handleSubmit(event)}
-            onKeyPress={(event) => {
-              if (event.key === 'Enter') {
-                handleSubmit(event);
-              }
-            }}
+            onSubmit={handleSubmit}
             render={({ handleSubmit }) => (
               <form
                 onSubmit={(event) => handleSubmit(event)}
@@ -101,59 +95,51 @@ const SignUpPage = ({ fetchRegisterRequest, isLoading, isLoggedIn, registerError
                   </Grid>
 
                   <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <Field
-                        component={TextField}
-                        name="email"
-                        label="Адрес электронной почты"
-                        fullWidth={true}
-                        required
-                      />
-                    </FormControl>
+                    <Field
+                      component={TextField}
+                      name="email"
+                      label="Адрес электронной почты"
+                      fullWidth={true}
+                      required
+                    />
                   </Grid>
 
                   <Grid item xs={6}>
-                    <FormControl fullWidth>
-                      <Field
-                        component={TextField}
-                        name="name"
-                        label="Имя"
-                        fullWidth={true}
-                        required
-                      />
-                    </FormControl>
+                    <Field
+                      component={TextField}
+                      name="name"
+                      label="Имя"
+                      fullWidth={true}
+                      required
+                    />
                   </Grid>
 
                   <Grid item xs={6}>
-                    <FormControl fullWidth>
-                      <Field
-                        component={TextField}
-                        name="surname"
-                        label="Фамилия"
-                        fullWidth={true}
-                        required
-                      />
-                    </FormControl>
+                    <Field
+                      component={TextField}
+                      name="surname"
+                      label="Фамилия"
+                      fullWidth={true}
+                      required
+                    />
                   </Grid>
 
                   <Grid item xs={12}>
-                    <FormControl fullWidth>
-                      <Field
-                        component={TextField}
-                        name="password"
-                        label="Пароль"
-                        type={showPassword ? 'text' : 'password'}
-                        fullWidth={true}
-                        required
+                    <Field
+                      component={TextField}
+                      name="password"
+                      label="Пароль"
+                      type={showPassword ? 'text' : 'password'}
+                      fullWidth={true}
+                      required
+                    >
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
                       >
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </Field>
-                    </FormControl>
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </Field>
                   </Grid>
 
                   {errors && (
@@ -176,7 +162,7 @@ const SignUpPage = ({ fetchRegisterRequest, isLoading, isLoggedIn, registerError
                 </Grid>
               </form>
             )}
-          ></Form>
+          />
         </Paper>
       </Grid>
     </Grid>

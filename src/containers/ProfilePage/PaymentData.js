@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { fetchProfileGet, fetchProfileRequest } from '../../modules/Profile';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import Box from '@material-ui/core/Box';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { Form, Field } from 'react-final-form';
+import { TextField } from 'final-form-material-ui';
+import formatPattern from 'format-string-by-pattern';
 import { MCIcon } from 'loft-taxi-mui-theme';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,105 +26,135 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PaymentData = (props) => {
+const formatCardsNumber = (value) => {
+  const number = value.replace(/[^\d]/g, '');
+  return formatPattern('9999 9999 9999 9999', number);
+};
+
+const formatCVC = (value) => {
+  const number = value.replace(/[^\d]/g, '');
+  return formatPattern('999', number);
+};
+
+function DatePickerWrapper(props) {
+  const {
+    input: { name, onChange, value, ...restInput },
+    meta,
+    ...rest
+  } = props;
+  const showError =
+    ((meta.submitError && !meta.dirtySinceLastSubmit) || meta.error) && meta.touched;
+
+  return (
+    <KeyboardDatePicker
+      {...rest}
+      name={name}
+      helperText={showError ? meta.error || meta.submitError : undefined}
+      error={showError}
+      inputProps={restInput}
+      onChange={onChange}
+      value={value === '' ? null : value}
+      format="MM/YY"
+      autoOk={true}
+      variant="inline"
+    />
+  );
+}
+
+const PaymentData = ({ profileData, fetchProfileRequest }) => {
   const classes = useStyles();
-  const { cardNumber, expiryDate, cardName, cvc } = props.profileData;
-  const [values, setValues] = useState({
-    cardNumber,
-    expiryDate,
-    cardName,
-    cvc,
-  });
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    props.fetchProfileRequest({ ...values });
+  const handleSubmit = (values) => {
+    fetchProfileRequest({ ...values });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid item xs={12}>
-        <Grid container justify="center" spacing={4}>
-          <Grid item xs={6}>
-            <Card elevation={3} className={classes.card}>
-              <Box
-                display="flex"
-                height="100%"
-                flexDirection="column"
-                justifyContent="space-around"
+    <Form
+      onSubmit={handleSubmit}
+      initialValues={profileData}
+      render={({ handleSubmit }) => (
+        <form onSubmit={handleSubmit}>
+          <Grid item xs={12}>
+            <Grid container justify="center" spacing={4}>
+              <Grid item xs={6}>
+                <Card elevation={3} className={classes.card}>
+                  <Box
+                    display="flex"
+                    height="100%"
+                    flexDirection="column"
+                    justifyContent="space-around"
+                  >
+                    <MCIcon />
+
+                    <Field
+                      component={TextField}
+                      name="cardNumber"
+                      label="Номер карты"
+                      placeholder="0000 0000 0000 0000"
+                      parse={formatCardsNumber}
+                      fullWidth={true}
+                      required
+                    />
+
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <Field
+                        component={DatePickerWrapper}
+                        name="expiryDate"
+                        label="Дата окончания действия"
+                        placeholder="12/20"
+                        fullWidth={true}
+                        required
+                      />
+                    </MuiPickersUtilsProvider>
+                  </Box>
+                </Card>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Card elevation={3} className={classes.card}>
+                  <Box
+                    display="flex"
+                    height="100%"
+                    flexDirection="column"
+                    justifyContent="space-around"
+                  >
+                    <Field
+                      component={TextField}
+                      name="cardName"
+                      label="Имя владельца"
+                      fullWidth={true}
+                      required
+                    />
+
+                    <Field
+                      component={TextField}
+                      name="cvc"
+                      label="CVC"
+                      fullWidth={true}
+                      placeholder="123"
+                      parse={formatCVC}
+                      required
+                    />
+                  </Box>
+                </Card>
+              </Grid>
+            </Grid>
+
+            <Grid align="center">
+              <Button
+                type="submit"
+                className={classes.button}
+                variant="contained"
+                size="medium"
+                color="primary"
               >
-                <MCIcon />
-
-                <InputLabel htmlFor="number">Номер карты</InputLabel>
-                <Input
-                  id="number"
-                  type="text"
-                  placeholder="0000 0000 0000 0000"
-                  value={values.cardNumber}
-                  onChange={handleChange('cardNumber')}
-                  autoFocus
-                />
-
-                <InputLabel htmlFor="date">Срок действия</InputLabel>
-                <Input
-                  id="date"
-                  type="text"
-                  placeholder="12/20"
-                  value={values.expiryDate}
-                  onChange={handleChange('expiryDate')}
-                  autoFocus
-                />
-              </Box>
-            </Card>
+                Сохранить
+              </Button>
+            </Grid>
           </Grid>
-
-          <Grid item xs={6}>
-            <Card elevation={3} className={classes.card}>
-              <Box
-                display="flex"
-                height="100%"
-                flexDirection="column"
-                justifyContent="space-around"
-              >
-                <InputLabel htmlFor="name">Имя владельца</InputLabel>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Иванов Иван"
-                  value={values.cardName}
-                  onChange={handleChange('cardName')}
-                />
-
-                <InputLabel htmlFor="cvc">CVC</InputLabel>
-                <Input
-                  id="cvc"
-                  type="text"
-                  placeholder="123"
-                  value={values.cvc}
-                  onChange={handleChange('cvc')}
-                />
-              </Box>
-            </Card>
-          </Grid>
-        </Grid>
-
-        <Grid align="center">
-          <Button
-            type="submit"
-            className={classes.button}
-            variant="contained"
-            size="medium"
-            color="primary"
-          >
-            Сохранить
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+        </form>
+      )}
+    />
   );
 };
 
