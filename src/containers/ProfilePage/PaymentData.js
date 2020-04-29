@@ -6,8 +6,8 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Box from '@material-ui/core/Box';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 import { Form, Field } from 'react-final-form';
 import { TextField } from 'final-form-material-ui';
 import formatPattern from 'format-string-by-pattern';
@@ -46,7 +46,7 @@ function DatePickerWrapper(props) {
     ((meta.submitError && !meta.dirtySinceLastSubmit) || meta.error) && meta.touched;
 
   return (
-    <KeyboardDatePicker
+    <DatePicker
       {...rest}
       name={name}
       helperText={showError ? meta.error || meta.submitError : undefined}
@@ -55,6 +55,7 @@ function DatePickerWrapper(props) {
       onChange={onChange}
       value={value === '' ? null : value}
       format="MM/YY"
+      views={['month', 'year']}
       autoOk={true}
       variant="inline"
     />
@@ -96,7 +97,7 @@ const PaymentData = ({ profileData, fetchProfileRequest }) => {
                       required
                     />
 
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
                       <Field
                         component={DatePickerWrapper}
                         name="expiryDate"
