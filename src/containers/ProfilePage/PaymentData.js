@@ -62,11 +62,12 @@ function DatePickerWrapper(props) {
   );
 }
 
-const PaymentData = ({ profileData, fetchProfileRequest }) => {
+const PaymentData = ({ profileData, fetchProfileRequest, toggleEdit }) => {
   const classes = useStyles();
 
   const handleSubmit = (values) => {
     fetchProfileRequest({ ...values });
+    toggleEdit();
   };
 
   return (

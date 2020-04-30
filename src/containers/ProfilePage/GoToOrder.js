@@ -12,10 +12,13 @@ export default function GoToOrder({ toggleEdit }) {
       </Grid>
 
       <Grid item xs={12} align="center">
-        <span onClick={() => toggleEdit()}>Изменить платежные данные</span>
         <Button variant="contained" color="primary">
           <Link to="/map">Перейти на карту</Link>
         </Button>
+      </Grid>
+
+      <Grid item xs={12} align="center">
+        <Link onClick={() => toggleEdit()}>Изменить платежные данные</Link>
       </Grid>
     </Grid>
   );
