@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchProfileGet, fetchProfileRequest } from '../../modules/Profile';
+import { getProfileData, fetchProfileRequest } from '../../modules/Profile';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -160,7 +160,7 @@ const PaymentData = ({ profileData, fetchProfileRequest }) => {
 };
 
 const mapStateToProps = (state) => ({
-  profileData: fetchProfileGet(state),
+  profileData: getProfileData(state),
 });
 const mapDispatchToProps = { fetchProfileRequest };
 

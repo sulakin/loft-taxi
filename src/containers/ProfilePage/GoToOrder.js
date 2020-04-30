@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-export default function GoToOrder() {
+export default function GoToOrder({ toggleEdit }) {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} align="center">
@@ -12,6 +12,7 @@ export default function GoToOrder() {
       </Grid>
 
       <Grid item xs={12} align="center">
+        <span onClick={() => toggleEdit()}>Изменить платежные данные</span>
         <Button variant="contained" color="primary">
           <Link to="/map">Перейти на карту</Link>
         </Button>

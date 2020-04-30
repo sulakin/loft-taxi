@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { isProfileFilled } from '../../modules/Profile';
 import GoToOrder from './GoToOrder';
@@ -22,6 +22,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfilePage = (props) => {
   const classes = useStyles();
+  const [isEdit, setIsEdit] = useState(false);
+
+  const toggleEdit = () => {
+    setIsEdit(!isEdit);
+  };
 
   return (
     <Grid container className={classes.root} direction="row" justify="center" alignItems="center">
@@ -38,7 +43,7 @@ const ProfilePage = (props) => {
           </Typography>
         </Grid>
 
-        {props.isProfileData ? <GoToOrder /> : <PaymentData />}
+        {props.isProfileData && !isEdit ? <GoToOrder toggleEdit={toggleEdit} /> : <PaymentData />}
       </Paper>
     </Grid>
   );

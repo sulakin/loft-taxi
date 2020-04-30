@@ -1,3 +1,4 @@
+export const getProfileData = (state) => state.profile;
 export const isProfileFilled = (state) => {
   const { cardNumber, expiryDate, cardName, cvc } = state.profile;
 
