@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfilePage = (props) => {
+const ProfilePage = ({ isProfileData }) => {
   const classes = useStyles();
   const [isEdit, setIsEdit] = useState(false);
 
@@ -43,7 +43,7 @@ const ProfilePage = (props) => {
           </Typography>
         </Grid>
 
-        {props.isProfileData && !isEdit ? (
+        {isProfileData && !isEdit ? (
           <GoToOrder toggleEdit={toggleEdit} />
         ) : (
           <PaymentData toggleEdit={toggleEdit} />

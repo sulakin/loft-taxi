@@ -1,17 +1,18 @@
 export const drawRoute = (coordinates) => {
-  const mapLayer = document.map.getLayer('route');
+  const map = document.map;
+  const mapLayer = map.getLayer('route');
 
-  if (typeof mapLayer !== 'undefined') {
-    document.map.removeLayer('route').removeSource('route');
+  if (!!mapLayer) {
+    map.removeLayer('route').removeSource('route');
   }
 
-  setTimeout(() => {
-    document.map.flyTo({
-      center: coordinates[0],
-      zoom: 15,
-    });
+  map.flyTo({
+    center: coordinates[0],
+    zoom: 15,
+  });
 
-    document.map.addLayer({
+  map.on('load', function () {
+    map.addLayer({
       id: 'route',
       type: 'line',
       source: {
@@ -34,5 +35,14 @@ export const drawRoute = (coordinates) => {
         'line-width': 8,
       },
     });
-  }, 300);
+  });
+};
+
+export const removeRoute = () => {
+  const map = document.map;
+  const mapLayer = map.getLayer('route');
+
+  if (!!mapLayer) {
+    map.removeLayer('route').removeSource('route');
+  }
 };

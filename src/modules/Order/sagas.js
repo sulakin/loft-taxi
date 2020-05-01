@@ -1,6 +1,6 @@
 import { takeLatest, put, call, fork } from 'redux-saga/effects';
 import { getRoute } from '../../helpers/fetchRequest';
-import { fetchOrderRequest, fetchOrderSuccess, fetchOrderFailure, setIsOrder } from './actions';
+import { fetchOrderRequest, fetchOrderSuccess, fetchOrderFailure } from './actions';
 
 function* orderWatcher() {
   yield takeLatest(fetchOrderRequest, orderFlow);
@@ -12,7 +12,6 @@ export function* orderFlow(action) {
 
   if (payload) {
     yield put(fetchOrderSuccess(payload));
-    yield setIsOrder(true);
   } else {
     yield put(fetchOrderFailure());
   }

@@ -6,10 +6,10 @@ import MapContainer from './MapContainer';
 import Order from './Order';
 import Grid from '@material-ui/core/Grid';
 
-const MapPage = (props) => {
+const MapPage = ({ isProfileData }) => {
   return (
     <Grid container>
-      {!props.isProfileData ? <FillPaymentData /> : <Order />}
+      {!isProfileData ? <FillPaymentData /> : <Order />}
       <MapContainer />
     </Grid>
   );

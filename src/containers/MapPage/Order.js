@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAddresses, fetchAddressRequest } from '../../modules/Address';
-import { fetchOrderRequest, getCords, getIsOrder, removeOrder } from '../../modules/Order';
+import { fetchOrderRequest, getCords, removeOrder } from '../../modules/Order';
+import { removeRoute } from '../../helpers/drawRoute';
 import { Info } from './Info';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -22,7 +23,7 @@ const useStyles = makeStyles(() => ({
   input: { marginBottom: 30 },
 }));
 
-function Order({ address, fetchAddressRequest, fetchOrderRequest, isOrder }) {
+function Order({ address, fetchAddressRequest, fetchOrderRequest, cords }) {
   const classes = useStyles();
   const [order, setOrder] = useState({
     start: '',
@@ -38,9 +39,9 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isOrder }) {
 
   useEffect(
     (order) => {
-      setOrder({ ...order, startAddressList: address, endAddressList: address, isOrder });
+      setOrder({ ...order, startAddressList: address, endAddressList: address, isOrder: true });
     },
-    [address, isOrder]
+    [address]
   );
 
   const handleSubmit = (event) => {
@@ -54,7 +55,10 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isOrder }) {
 
   const updateAddressList = (exclude) => address.filter((addres) => addres.value !== exclude);
 
-  const removeOrder = () => setOrder({ ...order, isOrder: false });
+  const removeOrder = () => {
+    setOrder({ ...order, isOrder: false });
+    removeRoute();
+  };
 
   return (
     <Paper className={classes.root}>
@@ -112,7 +116,6 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isOrder }) {
 const mapStateToProps = (state) => ({
   address: getAddresses(state),
   cords: getCords(state),
-  isOrder: getIsOrder(state),
 });
 const mapDispatchToProps = { fetchAddressRequest, fetchOrderRequest, removeOrder };
 
