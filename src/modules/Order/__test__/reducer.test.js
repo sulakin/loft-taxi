@@ -10,7 +10,7 @@ describe('Order reducer', () => {
   const state0 = reducer(undefined, fakeAction);
   const state1 = reducer(state0, fetchOrderRequest());
 
-  it(`set reducer order {isLoading: true, isOrder: false, cord: [], error: ''}`, () => {
+  it(`set reducer order {isLoading: true, cord: [], error: ''}`, () => {
     expect(state1).toEqual({ isLoading: true, cord: [], error: '' });
   });
 

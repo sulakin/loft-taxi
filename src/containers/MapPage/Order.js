@@ -23,14 +23,13 @@ const useStyles = makeStyles(() => ({
   input: { marginBottom: 30 },
 }));
 
-function Order({ address, fetchAddressRequest, fetchOrderRequest, cords }) {
+function Order({ address, fetchAddressRequest, fetchOrderRequest, removeOrder, cords }) {
   const classes = useStyles();
   const [order, setOrder] = useState({
     start: '',
     end: '',
     startAddressList: [],
     endAddressList: [],
-    isOrder: false,
   });
 
   useEffect(() => {
@@ -39,9 +38,13 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, cords }) {
 
   useEffect(
     (order) => {
-      setOrder({ ...order, startAddressList: address, endAddressList: address, isOrder: true });
+      setOrder({
+        ...order,
+        startAddressList: address,
+        endAddressList: address,
+      });
     },
-    [address]
+    [address, cords]
   );
 
   const handleSubmit = (event) => {
@@ -49,21 +52,20 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, cords }) {
     const { start, end } = order;
     if (start !== null && end !== null) {
       fetchOrderRequest({ start, end });
-      setOrder({ ...order, isOrder: true });
     }
   };
 
   const updateAddressList = (exclude) => address.filter((addres) => addres.value !== exclude);
 
-  const removeOrder = () => {
-    setOrder({ ...order, isOrder: false });
+  const clearOrder = () => {
+    removeOrder();
     removeRoute();
   };
 
   return (
     <Paper className={classes.root}>
-      {order.isOrder ? (
-        <Info removeOrder={removeOrder} />
+      {!!cords.length ? (
+        <Info clearOrder={clearOrder} />
       ) : (
         <form onSubmit={handleSubmit}>
           <Grid item xs={12} className={classes.input}>
