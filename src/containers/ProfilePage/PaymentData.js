@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getProfileData, fetchProfileRequest } from '../../modules/Profile';
+import { getProfileData, setProfileRequest, profileError, getErrors } from '../../modules/Profile';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -23,6 +23,18 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(4),
     position: 'relative',
+  },
+  alert: {
+    color: 'white',
+    fontWeight: 500,
+    padding: theme.spacing(1),
+    borderRadius: '4px',
+    boxSizing: 'border-box',
+    backgroundColor: '#f44336',
+    display: 'inline-block',
+    width: '100%',
+    marginTop: '20px',
+    textAlign: 'center',
   },
 }));
 
@@ -58,16 +70,20 @@ function DatePickerWrapper(props) {
       views={['month', 'year']}
       autoOk={true}
       variant="inline"
+      required
     />
   );
 }
 
-const PaymentData = ({ profileData, fetchProfileRequest, toggleEdit }) => {
+const PaymentData = ({ profileData, setProfileRequest, toggleEdit, profileError, errors }) => {
   const classes = useStyles();
 
   const handleSubmit = (values) => {
-    fetchProfileRequest({ ...values });
-    toggleEdit();
+    if (!!values.cardNumber && !!values.expiryDate && !!values.cardName && !!values.cvc) {
+      setProfileRequest({ ...values });
+    } else {
+      profileError('Все поля должны быть заполнены');
+    }
   };
 
   return (
@@ -135,12 +151,17 @@ const PaymentData = ({ profileData, fetchProfileRequest, toggleEdit }) => {
                       fullWidth={true}
                       placeholder="123"
                       parse={formatCVC}
-                      required
                     />
                   </Box>
                 </Card>
               </Grid>
             </Grid>
+
+            {errors && (
+              <Grid item xs={12} dir="rtl">
+                <span className={classes.alert}>{errors}</span>
+              </Grid>
+            )}
 
             <Grid align="center">
               <Button
@@ -162,7 +183,8 @@ const PaymentData = ({ profileData, fetchProfileRequest, toggleEdit }) => {
 
 const mapStateToProps = (state) => ({
   profileData: getProfileData(state),
+  errors: getErrors(state),
 });
-const mapDispatchToProps = { fetchProfileRequest };
+const mapDispatchToProps = { setProfileRequest, profileError };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PaymentData);

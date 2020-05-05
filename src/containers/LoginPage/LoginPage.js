@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: { padding: theme.spacing(6) },
   header: { marginBottom: 30 },
+  password: { position: 'relative' },
+  toggleShow: {
+    position: 'absolute',
+    top: '20px',
+    right: '8px',
+  },
   alert: {
     color: 'white',
     fontWeight: 500,
@@ -84,7 +90,7 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
                     />
                   </Grid>
 
-                  <Grid item xs={12}>
+                  <Grid item xs={12} className={classes.password}>
                     <Field
                       component={TextField}
                       name="password"
@@ -92,14 +98,14 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
                       type={showPassword ? 'text' : 'password'}
                       fullWidth={true}
                       required
+                    />
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      className={classes.toggleShow}
                     >
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </Field>
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
                   </Grid>
 
                   {errors && (

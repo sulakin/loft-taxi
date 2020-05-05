@@ -1,8 +1,19 @@
 import { createAction } from 'redux-actions';
 
-const fetchProfileGet = createAction('PROFILE/GET');
-const fetchProfileRequest = createAction('PROFILE/FEATCH_REQUEST');
-const fetchProfileSuccess = createAction('PROFILE/FEATCH_SUCCESS');
-const fetchProfileFailure = createAction('PROFILE/FEATCH_FAILURE');
+const setProfileRequest = createAction('PROFILE/SET_REQUEST');
+const setProfileSuccess = createAction('PROFILE/SET_SUCCESS');
+const setProfileFailure = createAction('PROFILE/SET_FAILURE');
+const getProfileRequest = createAction('PROFILE/GET_REQUEST');
+const getProfileSuccess = createAction('PROFILE/GET_SUCCESS');
+const getProfileFailure = createAction('PROFILE/GET_FAILURE');
+const profileError = createAction('PROFILE/ERROR');
 
-export { fetchProfileGet, fetchProfileRequest, fetchProfileSuccess, fetchProfileFailure };
+export {
+  setProfileRequest,
+  setProfileSuccess,
+  setProfileFailure,
+  getProfileRequest,
+  getProfileSuccess,
+  getProfileFailure,
+  profileError,
+};
