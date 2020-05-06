@@ -19,10 +19,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Header = (props) => {
+const Header = ({ isLoggedIn, logout }) => {
   const classes = useStyles();
   const logoBlack = require('../../assets/images/logo__black.svg');
-  const { isLoggedIn, logout } = props;
 
   const handleLogout = () => {
     logout();

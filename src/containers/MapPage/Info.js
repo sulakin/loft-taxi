@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
   header: { marginBottom: 30 },
 }));
 
-export const Info = ({ removeOrder }) => {
+export const Info = ({ clearOrder }) => {
   const classes = useStyles();
 
   return (
@@ -28,7 +28,7 @@ export const Info = ({ removeOrder }) => {
       </Grid>
 
       <Grid item xs={12}>
-        <Button onClick={() => removeOrder()} variant="contained" color="primary" fullWidth>
+        <Button onClick={() => clearOrder()} variant="contained" color="primary" fullWidth>
           Сделать новый заказ
         </Button>
       </Grid>

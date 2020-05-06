@@ -2,51 +2,53 @@ import { takeLatest, put, call, fork, select } from 'redux-saga/effects';
 import { getToken } from '../Auth/selectors';
 import { setProfile, getProfile } from '../../helpers/fetchRequest';
 import {
-  fetchProfileRequest,
-  fetchProfileSuccess,
-  fetchProfileFailure,
-  fetchProfileGet,
+  setProfileRequest,
+  setProfileSuccess,
+  setProfileFailure,
+  getProfileRequest,
+  getProfileSuccess,
+  getProfileFailure,
 } from './actions';
 
-export function* profileSetFlow(action) {
+export function* setProfileFlow(action) {
   try {
     const token = yield select(getToken);
     const data = yield call(setProfile, { ...action.payload, token });
 
     if (data.success) {
-      yield put(fetchProfileSuccess(data));
+      yield put(setProfileSuccess(action.payload));
     } else {
-      yield put(fetchProfileFailure(data));
+      yield put(setProfileFailure(data));
     }
   } catch (error) {
-    yield put(fetchProfileFailure(error));
+    yield put(setProfileFailure(error));
   }
 }
 
-function* profileSetWatch() {
-  yield takeLatest(fetchProfileRequest, profileSetFlow);
+function* setProfileWatch() {
+  yield takeLatest(setProfileRequest, setProfileFlow);
 }
 
-export function* profileGetFlow() {
+export function* getProfileFlow() {
   try {
     const token = yield select(getToken);
     const data = yield call(getProfile, { token });
 
-    if (data.success) {
-      yield put(fetchProfileSuccess(data));
+    if (!!data.id) {
+      yield put(getProfileSuccess(data));
     } else {
-      yield put(fetchProfileFailure(data));
+      yield put(getProfileFailure(data));
     }
   } catch (error) {
-    yield put(fetchProfileFailure(error));
+    yield put(getProfileFailure(error));
   }
 }
 
-function* profileGetWatch() {
-  yield takeLatest(fetchProfileGet, profileGetFlow);
+function* getProfileWatch() {
+  yield takeLatest(getProfileRequest, getProfileFlow);
 }
 
 export default function* () {
-  yield fork(profileSetWatch);
-  yield fork(profileGetWatch);
+  yield fork(setProfileWatch);
+  yield fork(getProfileWatch);
 }

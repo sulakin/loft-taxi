@@ -1,12 +1,6 @@
 import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
-import {
-  fetchOrderRequest,
-  fetchOrderSuccess,
-  fetchOrderFailure,
-  setIsOrder,
-  removeOrder,
-} from './actions';
+import { fetchOrderRequest, fetchOrderSuccess, fetchOrderFailure, removeOrder } from './actions';
 
 const cord = handleActions(
   {
@@ -16,14 +10,6 @@ const cord = handleActions(
     [removeOrder]: () => [],
   },
   []
-);
-
-const isOrder = handleActions(
-  {
-    [setIsOrder]: (_state, action) => action.payload,
-    [removeOrder]: () => false,
-  },
-  false
 );
 
 const isLoading = handleActions(
@@ -43,4 +29,4 @@ const error = handleActions(
   ''
 );
 
-export default combineReducers({ cord, isOrder, isLoading, error });
+export default combineReducers({ cord, isLoading, error });

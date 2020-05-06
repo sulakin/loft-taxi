@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAddresses, fetchAddressRequest } from '../../modules/Address';
-import { fetchOrderRequest, getCords, getIsOrder, removeOrder } from '../../modules/Order';
+import { fetchOrderRequest, getCords, removeOrder, isLoading } from '../../modules/Order';
+import { removeRoute } from '../../helpers/drawRoute';
 import { Info } from './Info';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -22,14 +23,13 @@ const useStyles = makeStyles(() => ({
   input: { marginBottom: 30 },
 }));
 
-function Order({ address, fetchAddressRequest, fetchOrderRequest, isOrder }) {
+function Order({ address, fetchAddressRequest, fetchOrderRequest, isLoading, removeOrder, cords }) {
   const classes = useStyles();
   const [order, setOrder] = useState({
     start: '',
     end: '',
     startAddressList: [],
     endAddressList: [],
-    isOrder: false,
   });
 
   useEffect(() => {
@@ -38,9 +38,13 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isOrder }) {
 
   useEffect(
     (order) => {
-      setOrder({ ...order, startAddressList: address, endAddressList: address, isOrder });
+      setOrder({
+        ...order,
+        startAddressList: address,
+        endAddressList: address,
+      });
     },
-    [address, isOrder]
+    [address, cords]
   );
 
   const handleSubmit = (event) => {
@@ -48,73 +52,81 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isOrder }) {
     const { start, end } = order;
     if (start !== null && end !== null) {
       fetchOrderRequest({ start, end });
-      setOrder({ ...order, isOrder: true });
     }
   };
 
   const updateAddressList = (exclude) => address.filter((addres) => addres.value !== exclude);
 
-  const removeOrder = () => setOrder({ ...order, isOrder: false });
+  const clearOrder = () => {
+    removeOrder();
+    removeRoute();
+  };
 
   return (
-    <>
-      <Paper className={classes.root}>
-        {order.isOrder ? (
-          <Info removeOrder={removeOrder} />
-        ) : (
-          <form onSubmit={handleSubmit}>
-            <Grid item xs={12} className={classes.input}>
-              <Autocomplete
-                name="start"
-                options={order.startAddressList}
-                getOptionLabel={(option) => option.value}
-                onChange={(event, selected) => {
-                  if (selected !== null) {
-                    setOrder({
-                      ...order,
-                      endAddressList: updateAddressList(selected.value),
-                      start: selected.value,
-                    });
-                  }
-                }}
-                renderInput={(params) => <TextField {...params} label="Откуда" />}
-              />
-            </Grid>
+    <Paper className={classes.root}>
+      {!!cords.length ? (
+        <Info clearOrder={clearOrder} />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <Grid item xs={12} className={classes.input}>
+            <Autocomplete
+              name="start"
+              options={order.startAddressList}
+              getOptionLabel={(option) => option.value}
+              onChange={(event, selected) => {
+                if (selected !== null) {
+                  setOrder({
+                    ...order,
+                    endAddressList: updateAddressList(selected.value),
+                    start: selected.value,
+                  });
+                }
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Откуда" disabled={isLoading} />
+              )}
+            />
+          </Grid>
 
-            <Grid item xs={12} className={classes.input}>
-              <Autocomplete
-                name="end"
-                options={order.endAddressList}
-                getOptionLabel={(option) => option.value}
-                onChange={(event, selected) => {
-                  if (selected !== null) {
-                    setOrder({
-                      ...order,
-                      startAddressList: updateAddressList(selected.value),
-                      end: selected.value,
-                    });
-                  }
-                }}
-                renderInput={(params) => <TextField {...params} label="Куда" />}
-              />
-            </Grid>
+          <Grid item xs={12} className={classes.input}>
+            <Autocomplete
+              name="end"
+              options={order.endAddressList}
+              getOptionLabel={(option) => option.value}
+              onChange={(event, selected) => {
+                if (selected !== null) {
+                  setOrder({
+                    ...order,
+                    startAddressList: updateAddressList(selected.value),
+                    end: selected.value,
+                  });
+                }
+              }}
+              renderInput={(params) => <TextField {...params} label="Куда" disabled={isLoading} />}
+            />
+          </Grid>
 
-            <Grid item xs={12}>
-              <Button type="submit" variant="contained" color="primary" fullWidth>
-                Вызвать такси
-              </Button>
-            </Grid>
-          </form>
-        )}
-      </Paper>
-    </>
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isLoading}
+              fullWidth
+            >
+              Вызвать такси
+            </Button>
+          </Grid>
+        </form>
+      )}
+    </Paper>
   );
 }
 
 const mapStateToProps = (state) => ({
   address: getAddresses(state),
   cords: getCords(state),
-  isOrder: getIsOrder(state),
+  isLoading: isLoading(state),
 });
 const mapDispatchToProps = { fetchAddressRequest, fetchOrderRequest, removeOrder };
 

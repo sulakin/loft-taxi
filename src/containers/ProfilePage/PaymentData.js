@@ -1,14 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { fetchProfileGet, fetchProfileRequest } from '../../modules/Profile';
+import {
+  getProfileData,
+  setProfileRequest,
+  profileError,
+  getErrors,
+  isLoading,
+} from '../../modules/Profile';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import Box from '@material-ui/core/Box';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
+import { Form, Field } from 'react-final-form';
+import { TextField } from 'final-form-material-ui';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { MCIcon } from 'loft-taxi-mui-theme';
+import formatPattern from 'format-string-by-pattern';
 
 const useStyles = makeStyles((theme) => ({
   button: { marginTop: '24px' },
@@ -21,113 +31,177 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(4),
     position: 'relative',
   },
+  alert: {
+    color: 'white',
+    fontWeight: 500,
+    padding: theme.spacing(1),
+    borderRadius: '4px',
+    boxSizing: 'border-box',
+    backgroundColor: '#f44336',
+    display: 'inline-block',
+    width: '100%',
+    marginTop: '20px',
+    textAlign: 'center',
+  },
+  preloader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));
 
-const PaymentData = (props) => {
-  const classes = useStyles();
-  const { cardNumber, expiryDate, cardName, cvc } = props.profileData;
-  const [values, setValues] = useState({
-    cardNumber,
-    expiryDate,
-    cardName,
-    cvc,
-  });
+const formatCardsNumber = (value) => {
+  const number = value.replace(/[^\d]/g, '');
+  return formatPattern('9999 9999 9999 9999', number);
+};
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+const formatCVC = (value) => {
+  const number = value.replace(/[^\d]/g, '');
+  return formatPattern('999', number);
+};
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    props.fetchProfileRequest({ ...values });
-  };
+function DatePickerWrapper(props) {
+  const {
+    input: { name, onChange, value, ...restInput },
+    meta,
+    ...rest
+  } = props;
+  const showError =
+    ((meta.submitError && !meta.dirtySinceLastSubmit) || meta.error) && meta.touched;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Grid item xs={12}>
-        <Grid container justify="center" spacing={4}>
-          <Grid item xs={6}>
-            <Card elevation={3} className={classes.card}>
-              <Box
-                display="flex"
-                height="100%"
-                flexDirection="column"
-                justifyContent="space-around"
+    <DatePicker
+      {...rest}
+      name={name}
+      helperText={showError ? meta.error || meta.submitError : undefined}
+      error={showError}
+      inputProps={restInput}
+      onChange={onChange}
+      value={value === '' ? null : value}
+      format="MM/YY"
+      views={['month', 'year']}
+      autoOk={true}
+      variant="inline"
+      required
+    />
+  );
+}
+
+const PaymentData = ({ profileData, setProfileRequest, isLoading, profileError, errors }) => {
+  const classes = useStyles();
+
+  const handleSubmit = (values) => {
+    if (!!values.cardNumber && !!values.expiryDate && !!values.cardName && !!values.cvc) {
+      setProfileRequest({ ...values });
+    } else {
+      profileError('Все поля должны быть заполнены');
+    }
+  };
+
+  return isLoading ? (
+    <div className={classes.preloader}>
+      <CircularProgress />
+    </div>
+  ) : (
+    <Form
+      onSubmit={handleSubmit}
+      initialValues={profileData}
+      render={({ handleSubmit }) => (
+        <form onSubmit={handleSubmit}>
+          <Grid item xs={12}>
+            <Grid container justify="center" spacing={4}>
+              <Grid item xs={6}>
+                <Card elevation={3} className={classes.card}>
+                  <Box
+                    display="flex"
+                    height="100%"
+                    flexDirection="column"
+                    justifyContent="space-around"
+                  >
+                    <MCIcon />
+
+                    <Field
+                      component={TextField}
+                      name="cardNumber"
+                      label="Номер карты"
+                      placeholder="0000 0000 0000 0000"
+                      parse={formatCardsNumber}
+                      fullWidth={true}
+                      required
+                    />
+
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                      <Field
+                        component={DatePickerWrapper}
+                        name="expiryDate"
+                        label="Дата окончания действия"
+                        placeholder="12/20"
+                        fullWidth={true}
+                        required
+                      />
+                    </MuiPickersUtilsProvider>
+                  </Box>
+                </Card>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Card elevation={3} className={classes.card}>
+                  <Box
+                    display="flex"
+                    height="100%"
+                    flexDirection="column"
+                    justifyContent="space-around"
+                  >
+                    <Field
+                      component={TextField}
+                      name="cardName"
+                      label="Имя владельца"
+                      fullWidth={true}
+                      required
+                    />
+
+                    <Field
+                      component={TextField}
+                      name="cvc"
+                      label="CVC"
+                      fullWidth={true}
+                      placeholder="123"
+                      parse={formatCVC}
+                    />
+                  </Box>
+                </Card>
+              </Grid>
+            </Grid>
+
+            {errors && (
+              <Grid item xs={12} dir="rtl">
+                <span className={classes.alert}>{errors}</span>
+              </Grid>
+            )}
+
+            <Grid align="center">
+              <Button
+                type="submit"
+                className={classes.button}
+                variant="contained"
+                size="medium"
+                color="primary"
               >
-                <MCIcon />
-
-                <InputLabel htmlFor="number">Номер карты</InputLabel>
-                <Input
-                  id="number"
-                  type="text"
-                  placeholder="0000 0000 0000 0000"
-                  value={values.cardNumber}
-                  onChange={handleChange('cardNumber')}
-                  autoFocus
-                />
-
-                <InputLabel htmlFor="date">Срок действия</InputLabel>
-                <Input
-                  id="date"
-                  type="text"
-                  placeholder="12/20"
-                  value={values.expiryDate}
-                  onChange={handleChange('expiryDate')}
-                  autoFocus
-                />
-              </Box>
-            </Card>
+                Сохранить
+              </Button>
+            </Grid>
           </Grid>
-
-          <Grid item xs={6}>
-            <Card elevation={3} className={classes.card}>
-              <Box
-                display="flex"
-                height="100%"
-                flexDirection="column"
-                justifyContent="space-around"
-              >
-                <InputLabel htmlFor="name">Имя владельца</InputLabel>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Иванов Иван"
-                  value={values.cardName}
-                  onChange={handleChange('cardName')}
-                />
-
-                <InputLabel htmlFor="cvc">CVC</InputLabel>
-                <Input
-                  id="cvc"
-                  type="text"
-                  placeholder="123"
-                  value={values.cvc}
-                  onChange={handleChange('cvc')}
-                />
-              </Box>
-            </Card>
-          </Grid>
-        </Grid>
-
-        <Grid align="center">
-          <Button
-            type="submit"
-            className={classes.button}
-            variant="contained"
-            size="medium"
-            color="primary"
-          >
-            Сохранить
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+        </form>
+      )}
+    />
   );
 };
 
 const mapStateToProps = (state) => ({
-  profileData: fetchProfileGet(state),
+  profileData: getProfileData(state),
+  isLoading: isLoading(state),
+  errors: getErrors(state),
 });
-const mapDispatchToProps = { fetchProfileRequest };
+const mapDispatchToProps = { setProfileRequest, profileError };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PaymentData);

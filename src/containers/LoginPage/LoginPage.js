@@ -4,16 +4,14 @@ import { connect } from 'react-redux';
 import { fetchAuthRequest, isLoggedIn, isLoading, authError, getErrors } from '../../modules/Auth';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { Form, Field } from 'react-final-form';
+import { TextField } from 'final-form-material-ui';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: { padding: theme.spacing(6) },
   header: { marginBottom: 30 },
+  password: { position: 'relative' },
+  toggleShow: {
+    position: 'absolute',
+    top: '20px',
+    right: '8px',
+  },
   alert: {
     color: 'white',
     fontWeight: 500,
@@ -39,21 +43,12 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
   const classes = useStyles();
   const logoWhite = require('../../assets/images/logo__white.svg');
   const [showPassword, setShowPassword] = useState(false);
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
-  });
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (values) => {
     if (!!values.password && !!values.email) {
       fetchAuthRequest(values);
     } else {
@@ -71,79 +66,71 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
 
       <Grid item xs={3}>
         <Paper className={classes.paper}>
-          <form
-            onSubmit={(event) => handleSubmit(event)}
-            onKeyPress={(event) => {
-              if (event.key === 'Enter') {
-                handleSubmit(event);
-              }
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography className={classes.header} component="h1" variant="h4" align="left">
-                  Войти
-                </Typography>
-                <Typography className={classes.subheader} component="p" align="left">
-                  Новый пользователь? <Link to="/signup">Зарегистрируйтесь</Link>
-                </Typography>
-              </Grid>
+          <Form
+            onSubmit={handleSubmit}
+            render={({ handleSubmit }) => (
+              <form onSubmit={handleSubmit}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography className={classes.header} component="h1" variant="h4" align="left">
+                      Войти
+                    </Typography>
+                    <Typography className={classes.subheader} component="p" align="left">
+                      Новый пользователь? <Link to="/signup">Зарегистрируйтесь</Link>
+                    </Typography>
+                  </Grid>
 
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="email">Имя пользователя</InputLabel>
-                  <Input
-                    id="email"
-                    type="text"
-                    value={values.email}
-                    onChange={handleChange('email')}
-                  />
-                </FormControl>
-              </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      component={TextField}
+                      name="email"
+                      label="Имя пользователя"
+                      disabled={isLoading}
+                      fullWidth={true}
+                      required
+                    />
+                  </Grid>
 
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor="password">Пароль</InputLabel>
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    onChange={handleChange('password')}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </Grid>
+                  <Grid item xs={12} className={classes.password}>
+                    <Field
+                      component={TextField}
+                      name="password"
+                      label="Пароль"
+                      type={showPassword ? 'text' : 'password'}
+                      disabled={isLoading}
+                      fullWidth={true}
+                      required
+                    />
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      className={classes.toggleShow}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </Grid>
 
-              {errors && (
-                <Grid item xs={12} dir="rtl">
-                  <span className={classes.alert}>{errors}</span>
+                  {errors && (
+                    <Grid item xs={12} dir="rtl">
+                      <span className={classes.alert}>{errors}</span>
+                    </Grid>
+                  )}
+
+                  <Grid item xs={12} dir="rtl">
+                    <Button
+                      disabled={isLoading}
+                      type="submit"
+                      variant="contained"
+                      size="medium"
+                      color="primary"
+                    >
+                      Войти
+                    </Button>
+                  </Grid>
                 </Grid>
-              )}
-
-              <Grid item xs={12} dir="rtl">
-                <Button
-                  disabled={isLoading}
-                  type="submit"
-                  variant="contained"
-                  size="medium"
-                  color="primary"
-                >
-                  Войти
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+              </form>
+            )}
+          />
         </Paper>
       </Grid>
     </Grid>

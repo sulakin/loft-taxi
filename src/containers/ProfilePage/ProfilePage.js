@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { isProfileFilled } from '../../modules/Profile';
+import { isProfileData } from '../../modules/Profile';
 import GoToOrder from './GoToOrder';
 import PaymentData from './PaymentData';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     marginTop: '48px',
   },
@@ -20,8 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfilePage = (props) => {
+const ProfilePage = ({ isProfileData }) => {
   const classes = useStyles();
+  const [isEdit, setIsEdit] = useState(false);
+
+  const toggleEdit = () => {
+    setIsEdit(!isEdit);
+  };
 
   return (
     <Grid container className={classes.root} direction="row" justify="center" alignItems="center">
@@ -38,7 +43,7 @@ const ProfilePage = (props) => {
           </Typography>
         </Grid>
 
-        {props.isProfileData ? <GoToOrder /> : <PaymentData />}
+        {isProfileData && !isEdit ? <GoToOrder toggleEdit={toggleEdit} /> : <PaymentData />}
       </Paper>
     </Grid>
   );
@@ -49,7 +54,7 @@ ProfilePage.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  isProfileData: isProfileFilled(state),
+  isProfileData: isProfileData(state),
 });
 
 export default connect(mapStateToProps)(ProfilePage);
