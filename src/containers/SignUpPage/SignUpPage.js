@@ -105,6 +105,7 @@ const SignUpPage = ({ fetchRegisterRequest, isLoading, isLoggedIn, registerError
                       component={TextField}
                       name="email"
                       label="Адрес электронной почты"
+                      disabled={isLoading}
                       fullWidth={true}
                       required
                     />
@@ -115,6 +116,7 @@ const SignUpPage = ({ fetchRegisterRequest, isLoading, isLoggedIn, registerError
                       component={TextField}
                       name="name"
                       label="Имя"
+                      disabled={isLoading}
                       fullWidth={true}
                       required
                     />
@@ -125,6 +127,7 @@ const SignUpPage = ({ fetchRegisterRequest, isLoading, isLoggedIn, registerError
                       component={TextField}
                       name="surname"
                       label="Фамилия"
+                      disabled={isLoading}
                       fullWidth={true}
                       required
                     />
@@ -136,6 +139,7 @@ const SignUpPage = ({ fetchRegisterRequest, isLoading, isLoggedIn, registerError
                       name="password"
                       label="Пароль"
                       type={showPassword ? 'text' : 'password'}
+                      disabled={isLoading}
                       fullWidth={true}
                       required
                     />

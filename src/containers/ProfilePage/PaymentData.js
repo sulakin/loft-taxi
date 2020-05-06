@@ -1,6 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getProfileData, setProfileRequest, profileError, getErrors } from '../../modules/Profile';
+import {
+  getProfileData,
+  setProfileRequest,
+  profileError,
+  getErrors,
+  isLoading,
+} from '../../modules/Profile';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -10,8 +16,9 @@ import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import { Form, Field } from 'react-final-form';
 import { TextField } from 'final-form-material-ui';
-import formatPattern from 'format-string-by-pattern';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { MCIcon } from 'loft-taxi-mui-theme';
+import formatPattern from 'format-string-by-pattern';
 
 const useStyles = makeStyles((theme) => ({
   button: { marginTop: '24px' },
@@ -35,6 +42,11 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginTop: '20px',
     textAlign: 'center',
+  },
+  preloader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }));
 
@@ -75,7 +87,7 @@ function DatePickerWrapper(props) {
   );
 }
 
-const PaymentData = ({ profileData, setProfileRequest, toggleEdit, profileError, errors }) => {
+const PaymentData = ({ profileData, setProfileRequest, isLoading, profileError, errors }) => {
   const classes = useStyles();
 
   const handleSubmit = (values) => {
@@ -86,7 +98,11 @@ const PaymentData = ({ profileData, setProfileRequest, toggleEdit, profileError,
     }
   };
 
-  return (
+  return isLoading ? (
+    <div className={classes.preloader}>
+      <CircularProgress />
+    </div>
+  ) : (
     <Form
       onSubmit={handleSubmit}
       initialValues={profileData}
@@ -183,6 +199,7 @@ const PaymentData = ({ profileData, setProfileRequest, toggleEdit, profileError,
 
 const mapStateToProps = (state) => ({
   profileData: getProfileData(state),
+  isLoading: isLoading(state),
   errors: getErrors(state),
 });
 const mapDispatchToProps = { setProfileRequest, profileError };

@@ -15,10 +15,10 @@ const blank = { cardNumber: '', expiryDate: '', cardName: '', cvc: '' };
 const profileData = handleActions(
   {
     [setProfileRequest]: () => blank,
-    [setProfileSuccess]: () => (_state, action) => action.payload,
+    [setProfileSuccess]: (_state, action) => action.payload,
     [setProfileFailure]: () => blank,
     [getProfileRequest]: () => blank,
-    [getProfileSuccess]: () => (_state, action) => action.payload,
+    [getProfileSuccess]: (_state, action) => action.payload,
     [getProfileFailure]: () => blank,
   },
   blank

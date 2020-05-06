@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { isProfileData, getProfileData } from '../../modules/Profile';
+import { isProfileData } from '../../modules/Profile';
 import { FillPaymentData } from './FillPaymentData';
 import MapContainer from './MapContainer';
 import Order from './Order';
@@ -18,6 +18,5 @@ const MapPage = ({ isProfileData }) => {
 const mapStateToProps = (state) => ({
   isProfileData: isProfileData(state),
 });
-const mapDispatchToProps = { getProfileData };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MapPage);
+export default connect(mapStateToProps)(MapPage);

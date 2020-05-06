@@ -11,13 +11,12 @@ import {
 } from './actions';
 
 export function* setProfileFlow(action) {
-  console.log(action);
   try {
     const token = yield select(getToken);
     const data = yield call(setProfile, { ...action.payload, token });
 
     if (data.success) {
-      yield put(setProfileSuccess(data));
+      yield put(setProfileSuccess(action.payload));
     } else {
       yield put(setProfileFailure(data));
     }

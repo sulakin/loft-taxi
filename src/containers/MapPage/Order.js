@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAddresses, fetchAddressRequest } from '../../modules/Address';
-import { fetchOrderRequest, getCords, removeOrder } from '../../modules/Order';
+import { fetchOrderRequest, getCords, removeOrder, isLoading } from '../../modules/Order';
 import { removeRoute } from '../../helpers/drawRoute';
 import { Info } from './Info';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
   input: { marginBottom: 30 },
 }));
 
-function Order({ address, fetchAddressRequest, fetchOrderRequest, removeOrder, cords }) {
+function Order({ address, fetchAddressRequest, fetchOrderRequest, isLoading, removeOrder, cords }) {
   const classes = useStyles();
   const [order, setOrder] = useState({
     start: '',
@@ -82,7 +82,9 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, removeOrder, c
                   });
                 }
               }}
-              renderInput={(params) => <TextField {...params} label="Откуда" />}
+              renderInput={(params) => (
+                <TextField {...params} label="Откуда" disabled={isLoading} />
+              )}
             />
           </Grid>
 
@@ -100,12 +102,18 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, removeOrder, c
                   });
                 }
               }}
-              renderInput={(params) => <TextField {...params} label="Куда" />}
+              renderInput={(params) => <TextField {...params} label="Куда" disabled={isLoading} />}
             />
           </Grid>
 
           <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isLoading}
+              fullWidth
+            >
               Вызвать такси
             </Button>
           </Grid>
@@ -118,6 +126,7 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, removeOrder, c
 const mapStateToProps = (state) => ({
   address: getAddresses(state),
   cords: getCords(state),
+  isLoading: isLoading(state),
 });
 const mapDispatchToProps = { fetchAddressRequest, fetchOrderRequest, removeOrder };
 

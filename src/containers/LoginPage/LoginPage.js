@@ -85,6 +85,7 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
                       component={TextField}
                       name="email"
                       label="Имя пользователя"
+                      disabled={isLoading}
                       fullWidth={true}
                       required
                     />
@@ -96,6 +97,7 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
                       name="password"
                       label="Пароль"
                       type={showPassword ? 'text' : 'password'}
+                      disabled={isLoading}
                       fullWidth={true}
                       required
                     />
@@ -128,7 +130,7 @@ const LoginPage = ({ fetchAuthRequest, isLoading, isLoggedIn, authError, errors 
                 </Grid>
               </form>
             )}
-          ></Form>
+          />
         </Paper>
       </Grid>
     </Grid>

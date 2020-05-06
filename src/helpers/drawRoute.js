@@ -42,7 +42,9 @@ export const removeRoute = () => {
   const map = document.map;
   const mapLayer = map.getLayer('route');
 
-  if (!!mapLayer) {
-    map.removeLayer('route').removeSource('route');
-  }
+  map.on('load', function () {
+    if (!!mapLayer) {
+      map.removeLayer('route').removeSource('route');
+    }
+  });
 };

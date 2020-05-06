@@ -43,11 +43,7 @@ const ProfilePage = ({ isProfileData }) => {
           </Typography>
         </Grid>
 
-        {isProfileData && !isEdit ? (
-          <GoToOrder toggleEdit={toggleEdit} />
-        ) : (
-          <PaymentData toggleEdit={toggleEdit} />
-        )}
+        {isProfileData && !isEdit ? <GoToOrder toggleEdit={toggleEdit} /> : <PaymentData />}
       </Paper>
     </Grid>
   );
