@@ -5,7 +5,7 @@ const fakeAction = {
   type: 'FAKE_ACTION',
 };
 
-describe('Редюсер аутентификации', () => {
+describe('Редьюсер аутентификации', () => {
   const state0 = reducer(undefined, fakeAction);
 
   it('отправка запроса', () => {

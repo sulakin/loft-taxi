@@ -5,7 +5,7 @@ const fakeAction = {
   type: 'FAKE_ACTION',
 };
 
-describe('Редюсер адресов', () => {
+describe('Редьюсер адресов', () => {
   const dataAddresss = ['Address1', 'Address2'];
   const state0 = reducer(undefined, fakeAction);
   const state1 = reducer(state0, fetchAddressRequest());

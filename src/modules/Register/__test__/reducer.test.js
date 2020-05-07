@@ -5,7 +5,7 @@ const fakeAction = {
   type: 'FAKE_ACTION',
 };
 
-describe('Редюсер регистрации', () => {
+describe('Редьюсер регистрации', () => {
   const state0 = reducer(undefined, fakeAction);
 
   it('отправляем запрос', () => {

@@ -5,7 +5,7 @@ const fakeAction = {
   type: 'FAKE_ACTION',
 };
 
-describe('Редюсер заказа', () => {
+describe('Редьюсер заказа', () => {
   const cord = [[1, 2]];
   const state0 = reducer(undefined, fakeAction);
   const state1 = reducer(state0, fetchOrderRequest());

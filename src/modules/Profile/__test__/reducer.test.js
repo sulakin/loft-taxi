@@ -5,7 +5,7 @@ const fakeAction = {
   type: 'FAKE_ACTION',
 };
 
-describe('Редюсер профиля', () => {
+describe('Редьюсер профиля', () => {
   const mockData = {
     errors: null,
     isLoading: true,
