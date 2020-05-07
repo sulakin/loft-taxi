@@ -1,10 +1,9 @@
 import React from 'react';
+import { render } from '@testing-library/react';
 import PageNotFound from '../PageNotFound';
-import { shallow } from 'enzyme';
 
-describe('Test PageNotFound ', () => {
-  it('render component', () => {
-    const wrapper = shallow(<PageNotFound />);
-    expect(wrapper).toBeTruthy();
-  });
+it('Компонент 404 страницы', () => {
+  const { getByText } = render(<PageNotFound />);
+
+  expect(getByText(/Страница не найдена/i)).toBeInTheDocument();
 });

@@ -5,10 +5,10 @@ const fakeAction = {
   type: 'FAKE_ACTION',
 };
 
-describe('Auth reducer', () => {
+describe('Редюсер аутентификации', () => {
   const state0 = reducer(undefined, fakeAction);
 
-  it('send request', () => {
+  it('отправка запроса', () => {
     const state1 = reducer(state0, fetchAuthRequest());
 
     expect(state1).toEqual({
@@ -19,7 +19,7 @@ describe('Auth reducer', () => {
     });
   });
 
-  it('auth user', () => {
+  it('пользователь авторизован', () => {
     const payload = { token: 'token' };
     const state2 = reducer(state0, fetchAuthSuccess(payload));
 
@@ -31,7 +31,7 @@ describe('Auth reducer', () => {
     });
   });
 
-  it('auth fail', () => {
+  it('ошибка авторизации', () => {
     const payload = { error: 'error' };
     const state3 = reducer(state0, fetchAuthFailure(payload));
 
@@ -43,7 +43,7 @@ describe('Auth reducer', () => {
     });
   });
 
-  it('logout', () => {
+  it('выход', () => {
     const state4 = reducer(state0, logout());
 
     expect(state4).toEqual({

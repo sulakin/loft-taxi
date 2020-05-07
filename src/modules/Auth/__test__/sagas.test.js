@@ -3,36 +3,36 @@ import { call, put } from 'redux-saga/effects';
 import { fetchAuthRequest, fetchAuthSuccess, fetchAuthFailure } from '../actions';
 import { auth } from '../../../helpers/fetchRequest';
 
-describe('Auth sagas', () => {
-  describe('success auth', () => {
+describe('Сага аутентификации', () => {
+  describe('Сценарий успешной авторизация', () => {
     const mockUser = {
       email: 'sulakin.vadim@gmail.com',
       password: 'qaz123',
     };
 
     const iterator = authFlow(fetchAuthRequest(mockUser));
-    it('send request call', () => {
+    it('отправляем данные пользователя', () => {
       expect(iterator.next(mockUser).value).toEqual(call(auth, mockUser));
     });
 
-    it('fetchAuthSuccess)', () => {
+    it('получаем токен', () => {
       const data = { success: true, token: 'token' };
       expect(iterator.next(data).value).toEqual(put(fetchAuthSuccess(data)));
     });
   });
 
-  describe('error auth', () => {
+  describe('Сценарий ошибки авторизации', () => {
     const mockUser = {
       email: 'sulakin.vadim@gmail.com',
       password: 'qaz321',
     };
 
     const iterator = authFlow(fetchAuthRequest(mockUser));
-    it('send request call', () => {
+    it('отправляем данные пользователя', () => {
       expect(iterator.next(mockUser).value).toEqual(call(auth, mockUser));
     });
 
-    it('fetchAuthFailure)', () => {
+    it('получаем ошибку', () => {
       const data = { success: false, error: 'Ошибка авторизации' };
 
       expect(iterator.next(data).value).toEqual(put(fetchAuthFailure(data)));

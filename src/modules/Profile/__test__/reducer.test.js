@@ -5,7 +5,7 @@ const fakeAction = {
   type: 'FAKE_ACTION',
 };
 
-describe('Profile reducer', () => {
+describe('Редюсер профиля', () => {
   const mockData = {
     errors: null,
     isLoading: true,
@@ -20,7 +20,7 @@ describe('Profile reducer', () => {
   const state0 = reducer(undefined, fakeAction);
 
   const state1 = reducer(state0, setProfileRequest(mockData));
-  it(`write data to the profile`, () => {
+  it(`запись данных в профиль`, () => {
     expect(state1).toEqual(mockData);
   });
 });

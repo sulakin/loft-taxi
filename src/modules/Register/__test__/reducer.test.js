@@ -5,10 +5,10 @@ const fakeAction = {
   type: 'FAKE_ACTION',
 };
 
-describe('Register reducer', () => {
+describe('Редюсер регистрации', () => {
   const state0 = reducer(undefined, fakeAction);
 
-  it('send request', () => {
+  it('отправляем запрос', () => {
     const state1 = reducer(state0, fetchRegisterRequest());
 
     expect(state1).toEqual({
@@ -19,7 +19,7 @@ describe('Register reducer', () => {
     });
   });
 
-  it('Register user', () => {
+  it('успешная регистрация', () => {
     const payload = { token: 'token' };
     const state2 = reducer(state0, fetchRegisterSuccess(payload));
 
@@ -31,7 +31,7 @@ describe('Register reducer', () => {
     });
   });
 
-  it('Register fail', () => {
+  it('ошибка регистрации', () => {
     const payload = { error: 'error' };
     const state3 = reducer(state0, fetchRegisterFailure(payload));
 

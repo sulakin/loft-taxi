@@ -1,25 +1,38 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import { Provider } from 'react-redux';
+import { render } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import App from '../../../components/App';
 import LoginPage from '../LoginPage';
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-  Map: () => ({}),
-}));
+const mockStore = configureMockStore();
+const store = mockStore({
+  auth: {
+    isLoggedIn: false,
+  },
+});
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+describe('Форма входа', () => {
+  it('Поля ввода', () => {
+    const { getByText } = render(
+      <Provider store={store}>
+        <App>
+          <LoginPage />
+        </App>
+      </Provider>
+    );
+    expect(getByText(/Имя пользователя/i)).toBeInTheDocument();
+    expect(getByText(/Пароль/i)).toBeInTheDocument();
+  });
 
-it('renders without crashing', () => {
-  const store = mockStore({});
-  shallow(
-    <Provider store={store}>
-      <App>
-        <LoginPage />
-      </App>
-    </Provider>
-  );
+  it('Ссылка на страницу регистрации', () => {
+    const { getByText } = render(
+      <Provider store={store}>
+        <App>
+          <LoginPage />
+        </App>
+      </Provider>
+    );
+    expect(getByText(/Зарегистрируйтесь/i)).toBeInTheDocument();
+  });
 });

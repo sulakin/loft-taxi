@@ -1,13 +1,14 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+import { render, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { render } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
 import App from '../../App';
-import Header from '../Header';
 
 const mockStore = configureMockStore();
 
-it('Компонент верхнего меню', () => {
+test('rendering map page/has profile data', () => {
   const store = mockStore({
     auth: {
       isLoggedIn: true,
@@ -27,16 +28,18 @@ it('Компонент верхнего меню', () => {
       cord: [],
     },
   });
-
+  const history = createMemoryHistory();
   const { getByText } = render(
     <Provider store={store}>
-      <App>
-        <Header />
-      </App>
+      <Router history={history}>
+        <App />
+      </Router>
     </Provider>
   );
 
-  expect(getByText(/Карта/i)).toBeInTheDocument();
   expect(getByText(/Профиль/i)).toBeInTheDocument();
-  expect(getByText(/Выйти/i)).toBeInTheDocument();
+
+  fireEvent.click(getByText(/Профиль/i));
+
+  expect(getByText(/Способ оплаты/i)).toBeInTheDocument();
 });

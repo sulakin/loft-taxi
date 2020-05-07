@@ -1,25 +1,52 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import { Provider } from 'react-redux';
+import { render, fireEvent } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import App from '../../../components/App';
-import SignUpPage from '../SignUpPage';
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-  Map: () => ({}),
-}));
+const mockStore = configureMockStore();
+const store = mockStore({
+  auth: {
+    isLoggedIn: false,
+  },
+  register: {
+    isLoggedIn: false,
+  },
+});
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+describe('Форма регистрации', () => {
+  it('Поля ввода', () => {
+    const { getByText } = render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
 
-it('renders without crashing', () => {
-  const store = mockStore({});
-  shallow(
-    <Provider store={store}>
-      <App>
-        <SignUpPage />
-      </App>
-    </Provider>
-  );
+    fireEvent.click(getByText(/Зарегистрируйтесь/i));
+    expect(getByText(/Адрес электронной почты/i)).toBeInTheDocument();
+    expect(getByText(/Имя/i)).toBeInTheDocument();
+    expect(getByText(/Фамилия/i)).toBeInTheDocument();
+    expect(getByText(/Пароль/i)).toBeInTheDocument();
+    expect(getByText(/Пароль/i)).toBeInTheDocument();
+  });
+
+  it('Кнопка Зарегистрироваться', () => {
+    const { getByText } = render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+
+    expect(getByText(/Зарегистрироваться/i)).toBeInTheDocument();
+  });
+
+  it('Ссылка на страницу входа', () => {
+    const { getByText } = render(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
+
+    expect(getByText(/Уже зарегистрированы/i)).toBeInTheDocument();
+  });
 });

@@ -7,7 +7,7 @@ import ProfilePage from '../../containers/ProfilePage';
 import PageNotFound from '../../containers/PageNotFound';
 import PrivateRoute from '../../components/PrivateRoute';
 
-export default (Router) => {
+export default () => {
   return (
     <Switch>
       <Route path="/" component={LoginPage} exact />

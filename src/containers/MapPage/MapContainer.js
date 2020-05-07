@@ -22,7 +22,7 @@ const MapContainer = ({ cords }) => {
   const mapContainer = createRef(null);
 
   useEffect(() => {
-    if (mapContainer) {
+    if (mapContainer && mapboxgl.Map) {
       const params = {
         accessToken:
           'pk.eyJ1Ijoic3VsYWtpbiIsImEiOiJjazhldTVuZWQwMGczM250OHkzbHJxd3Z5In0.FrkwPTWbE4mYb6DA0Hu0Pg',

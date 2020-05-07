@@ -3,14 +3,14 @@ import { call, put } from 'redux-saga/effects';
 import { fetchAddressRequest, fetchAddressSuccess } from '../actions';
 import { getAddressList } from '../../../helpers/fetchRequest';
 
-describe('Address sagas', () => {
+describe('Сага адреса', () => {
   const iterator = addressFlow(fetchAddressRequest());
 
-  it('address call', () => {
+  it('вызов саги', () => {
     expect(iterator.next().value).toEqual(call(getAddressList));
   });
 
-  it('fetchAddressSuccess', () => {
+  it('запрос списка адресов', () => {
     const data = {
       addresses: [
         'Пулково (LED)',

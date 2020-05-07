@@ -9,36 +9,36 @@ const randomString = () => {
   return rnd.substring(0, 5);
 };
 
-describe('Register sagas', () => {
-  describe('success Register', () => {
+describe('Сага регистрации', () => {
+  describe('Сценарий успешной регистрации', () => {
     const mockUser = {
       email: `sulakin${randomString()}.vadim@gmail.com`,
       password: 'qaz123',
     };
 
     const iterator = registerFlow(fetchRegisterRequest(mockUser));
-    it('send request call', () => {
+    it('отправляем данные пользователя', () => {
       expect(iterator.next(mockUser).value).toEqual(call(register, mockUser));
     });
 
-    it('fetchRegisterSuccess)', () => {
+    it('получаем токен', () => {
       const data = { success: true, token: 'token' };
       expect(iterator.next(data).value).toEqual(put(fetchRegisterSuccess(data)));
     });
   });
 
-  describe('error Register', () => {
+  describe('Сценарий ошибки при регистрации', () => {
     const mockUser = {
       email: 'sulakin.vadim@gmail.com',
       password: 'qaz321',
     };
 
     const iterator = registerFlow(fetchRegisterRequest(mockUser));
-    it('send request call', () => {
+    it('отправляем данные пользователя', () => {
       expect(iterator.next(mockUser).value).toEqual(call(register, mockUser));
     });
 
-    it('fetchRegisterFailure)', () => {
+    it('получаем ошибку', () => {
       const data = { success: false, error: 'Ошибка авторизации, пользователь существует' };
 
       expect(iterator.next(data).value).toEqual(put(fetchRegisterFailure(data)));

@@ -1,22 +1,22 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import { Provider } from 'react-redux';
+import { render } from '@testing-library/react';
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import App from '../App';
+import App from '../../../components/App';
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-  Map: () => ({}),
-}));
+const mockStore = configureMockStore();
+const store = mockStore({
+  auth: {
+    isLoggedIn: false,
+  },
+});
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
-
-it('renders without crashing', () => {
-  const store = mockStore({});
-  shallow(
+it('Приложение запущено без сбоев', () => {
+  const { getByText } = render(
     <Provider store={store}>
       <App />
     </Provider>
   );
+
+  expect(getByText(/Новый пользователь/i)).toBeInTheDocument();
 });
