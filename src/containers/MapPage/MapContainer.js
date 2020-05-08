@@ -1,6 +1,6 @@
 import React, { useEffect, createRef } from 'react';
 import { connect } from 'react-redux';
-import { getCords } from '../../modules/Order';
+import { getCoords } from '../../modules/Order';
 import { drawRoute } from '../../helpers/drawRoute';
 import { makeStyles } from '@material-ui/core/styles';
 import mapboxgl from 'mapbox-gl';
@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const MapContainer = ({ cords }) => {
+const MapContainer = ({ coords }) => {
   const classes = useStyles();
   const mapContainer = createRef(null);
 
@@ -36,14 +36,14 @@ const MapContainer = ({ cords }) => {
   }, [mapContainer]);
 
   useEffect(() => {
-    if (!!cords.length) {
-      drawRoute(cords);
+    if (coords.length) {
+      drawRoute(coords);
     }
-  }, [cords]);
+  }, [coords]);
 
   return <div id="map" className={classes.root} ref={mapContainer}></div>;
 };
 
-const mapStateToProps = (state) => ({ cords: getCords(state) });
+const mapStateToProps = (state) => ({ coords: getCoords(state) });
 
 export default connect(mapStateToProps)(MapContainer);

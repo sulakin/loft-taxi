@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAddresses, fetchAddressRequest } from '../../modules/Address';
-import { fetchOrderRequest, getCords, removeOrder, isLoading } from '../../modules/Order';
+import { fetchOrderRequest, getCoords, removeOrder, isLoading } from '../../modules/Order';
 import { removeRoute } from '../../helpers/drawRoute';
 import { Info } from './Info';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,7 +23,14 @@ const useStyles = makeStyles(() => ({
   input: { marginBottom: 30 },
 }));
 
-function Order({ address, fetchAddressRequest, fetchOrderRequest, isLoading, removeOrder, cords }) {
+function Order({
+  address,
+  fetchAddressRequest,
+  fetchOrderRequest,
+  isLoading,
+  removeOrder,
+  coords,
+}) {
   const classes = useStyles();
   const [order, setOrder] = useState({
     start: '',
@@ -44,7 +51,7 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isLoading, rem
         endAddressList: address,
       });
     },
-    [address, cords]
+    [address, coords]
   );
 
   const handleSubmit = (event) => {
@@ -64,7 +71,7 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isLoading, rem
 
   return (
     <Paper className={classes.root}>
-      {!!cords.length ? (
+      {!!coords.length ? (
         <Info clearOrder={clearOrder} />
       ) : (
         <form onSubmit={handleSubmit}>
@@ -125,7 +132,7 @@ function Order({ address, fetchAddressRequest, fetchOrderRequest, isLoading, rem
 
 const mapStateToProps = (state) => ({
   address: getAddresses(state),
-  cords: getCords(state),
+  coords: getCoords(state),
   isLoading: isLoading(state),
 });
 const mapDispatchToProps = { fetchAddressRequest, fetchOrderRequest, removeOrder };
